@@ -160,8 +160,8 @@
        <h1 class="hero-title">BuckyVault</h1>
        <p class="hero-subtitle">Audited fullerene custody. ERC-20 tokens backed by physical C₆₀ in nitrogen-sealed Class III vaults.</p>
        <div style="margin-top: 40px;">
-           <button class="btn btn-primary" aria-label="Trade FUL60 on Uniswap" id="hero-trade-btn">
-               Trade on Uniswap
+           <button class="btn btn-primary" aria-label="Buy, sell & trade Ethereum and other top tokens on Uniswap" id="hero-trade-btn">
+               Buy, sell & trade Ethereum and other top tokens on Uniswap
            </button>
            <button class="btn" aria-label="View FUL60 on PolygonScan" 
                    onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS', '_blank')">
@@ -233,8 +233,8 @@
                        onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS', '_blank')">
                    View Contract
                </button>
-               <button class="btn btn-primary" aria-label="Trade FUL60 on Uniswap" id="trade-btn">
-                   Trade on Uniswap
+               <button class="btn btn-primary" aria-label="Buy, sell & trade Ethereum and other top tokens on Uniswap" id="trade-btn">
+                   Buy, sell & trade Ethereum and other top tokens on Uniswap
                </button>
                <button class="btn" aria-label="Track liquidity on DexTools" 
                        onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS', '_blank')">
@@ -278,8 +278,8 @@
                </iframe>
            </div>
            <div style="text-align:center; margin-top: 1.5rem;">
-               <button id="trade-btn" class="btn btn-primary" aria-label="Trade FUL60 on Uniswap">
-                   Trade on Uniswap
+               <button id="trade-btn" class="btn btn-primary" aria-label="Buy, sell & trade Ethereum and other top tokens on Uniswap">
+                   Buy, sell & trade Ethereum and other top tokens on Uniswap
                </button>
                <button class="btn" aria-label="View contract on PolygonScan" 
                        onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS', '_blank')">
@@ -312,7 +312,7 @@
 <!-- Sticky CTA (mobile) -->
 <div class="sticky-cta" id="sticky-cta">
    <button id="sticky-trade-btn" class="btn btn-primary">
-       Trade
+       Buy, sell & trade Ethereum and other top tokens on Uniswap
    </button>
    <button class="btn" id="sticky-redeem" style="display:none;" onclick="document.querySelector('#redeem-btn').click()">
        Redeem
@@ -384,7 +384,7 @@ window.addEventListener('resize', () => {
     setTimeout(() => toast.classList.remove('show'), duration);
   }
 
-  // Unified Trade: ETH in "From" (buy with), "To" (sell) blank
+  // Unified Trade: Open full Uniswap on Polygon with ETH in "From", "To" blank
   function openUniswapTrade() {
     const url = `https://app.uniswap.org/swap?chain=polygon&inputCurrency=ETH`;
     window.open(url, '_blank');
