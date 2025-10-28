@@ -160,10 +160,10 @@
        <h1 class="hero-title">BuckyVault</h1>
        <p class="hero-subtitle">Audited fullerene custody. ERC-20 tokens backed by physical C₆₀ in nitrogen-sealed Class III vaults.</p>
        <div style="margin-top: 40px;">
-           <button class="btn btn-primary" id="hero-trade-btn">
-               Buy FUL60 on Uniswap
+           <button class="btn btn-primary" aria-label="Trade FUL60 on Uniswap" id="hero-trade-btn">
+               Trade on Uniswap
            </button>
-           <button class="btn" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS', '_blank')">
+           <button class="btn" aria-label="View FUL60 on PolygonScan" onclick="location.href='#blockchain'">
                View on PolygonScan
            </button>
        </div>
@@ -196,13 +196,13 @@
        <div class="grid-2">
            <div class="card proof-item">
                <p>> Purity ≥99.9% (HPLC + UV–vis).</p>
-               <button class="btn" onclick="window.open('https://ipfs.io/ipfs/QmAssayCID')">
+               <button class="btn" aria-label="View assay certificate on IPFS" onclick="window.open('https://ipfs.io/ipfs/QmAssayCID')">
                    View Assay on IPFS
                </button>
            </div>
            <div class="card proof-item">
                <p>> N₂-sealed Class III vault.</p>
-               <button class="btn" onclick="window.open('https://ipfs.io/ipfs/QmVaultCID')">
+               <button class="btn" aria-label="View vault proof on IPFS" onclick="window.open('https://ipfs.io/ipfs/QmVaultCID')">
                    View Vault Proof
                </button>
            </div>
@@ -226,14 +226,14 @@
                <tr><td>Vault CID</td><td>QmVaultCID</td></tr>
            </table>
            <div style="text-align:center; margin-top:24px;">
-               <button class="btn" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS', '_blank')">
+               <button class="btn" aria-label="View smart contract on PolygonScan" onclick="location.href='#blockchain'">
                    View Contract
                </button>
-               <button class="btn btn-primary" id="trade-btn">
-                   Buy FUL60 on Uniswap
+               <button class="btn btn-primary" aria-label="Trade FUL60 on Uniswap" id="trade-btn">
+                   Trade on Uniswap
                </button>
-               <button class="btn" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS', '_blank')">
-                   Track Liquidity
+               <button class="btn" aria-label="Track liquidity on DexTools" onclick="location.href='#blockchain'">
+                   Track on DexTools
                </button>
            </div>
        </div>
@@ -253,8 +253,8 @@
            </ol>
            <div id="web3-status" aria-live="polite"></div>
            <div style="text-align:center;">
-               <button id="connect-wallet" class="btn">Connect Wallet</button>
-               <button id="redeem-btn" class="btn btn-primary" style="display:none;">Redeem Tokens</button>
+               <button id="connect-wallet" class="btn" aria-label="Connect MetaMask wallet">Connect Wallet</button>
+               <button id="redeem-btn" class="btn btn-primary" style="display:none;" aria-label="Redeem FUL60 tokens">Redeem Tokens</button>
            </div>
        </div>
    </div>
@@ -263,6 +263,7 @@
    <div class="container">
        <div class="card">
            <h2 class="section-title">Blockchain Integration</h2>
+           <!-- Ethereum Chart Only — Graph Pushed Down -->
            <div class="chart-container">
                <h3 class="chart-title">Live ETH Price & Liquidity (Ethereum)</h3>
                <iframe class="chart-iframe"
@@ -273,16 +274,16 @@
                </iframe>
            </div>
            <div style="text-align:center; margin-top: 1.5rem;">
-               <button id="trade-btn" class="btn btn-primary">
-                   Buy FUL60 on Uniswap
+               <button id="trade-btn" class="btn btn-primary" aria-label="Trade ETH on Uniswap">
+                   Trade on Uniswap
                </button>
-               <button class="btn" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS', '_blank')">
+               <button class="btn" aria-label="View contract on PolygonScan" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS')">
                    View Contract
                </button>
-               <button class="btn" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS', '_blank')">
+               <button class="btn" aria-label="Track liquidity on DexTools" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS')">
                    Track Liquidity
                </button>
-               <button class="btn" onclick="window.open('whitepaper.pdf', '_blank')">
+               <button class="btn" aria-label="Download project whitepaper" onclick="window.open('whitepaper.pdf')">
                    Download Whitepaper
                </button>
            </div>
@@ -304,7 +305,7 @@
 <!-- Sticky CTA (mobile) -->
 <div class="sticky-cta" id="sticky-cta">
    <button id="sticky-trade-btn" class="btn btn-primary" onclick="document.querySelector('#blockchain').scrollIntoView({behavior:'smooth'})">
-       Buy FUL60
+       Trade
    </button>
    <button class="btn" id="sticky-redeem" style="display:none;" onclick="document.querySelector('#redeem-btn').click()">
        Redeem
@@ -376,26 +377,28 @@ window.addEventListener('resize', () => {
     setTimeout(() => toast.classList.remove('show'), duration);
   }
 
-  // Unified Trade: Buy FUL60 on Uniswap (Polygon)
+  // Unified Trade: Open Uniswap with ETH pre-filled in "Buy" (input)
   const FUL60_CONTRACT = 'YOUR_FUL60_CONTRACT_ADDRESS'; // REPLACE POST-DEPLOYMENT
-  function openUniswapBuy() {
-    const url = `https://app.uniswap.org/swap?chain=polygon&inputCurrency=0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270&outputCurrency=${FUL60_CONTRACT}`;
+  function openUniswapTrade() {
+    const url = `https://app.uniswap.org/swap?chain=polygon&inputCurrency=ETH&outputCurrency=${FUL60_CONTRACT}`;
     window.open(url, '_blank');
   }
-  document.getElementById('hero-trade-btn')?.addEventListener('click', openUniswapBuy);
-  document.getElementById('trade-btn')?.addEventListener('click', openUniswapBuy);
+  document.getElementById('hero-trade-btn')?.addEventListener('click', openUniswapTrade);
+  document.getElementById('trade-btn')?.addEventListener('click', openUniswapTrade);
 
   // Sticky CTA
   const stickyCTA = document.getElementById('sticky-cta');
   const stickyTradeBtn = document.getElementById('sticky-trade-btn');
   const stickyRedeem = document.getElementById('sticky-redeem');
   const blockchainSection = document.getElementById('blockchain');
+  // Hide sticky "Trade" when #blockchain is visible
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       stickyTradeBtn.style.display = entry.isIntersecting ? 'none' : 'inline-flex';
     });
   }, { threshold: 0.3 });
   observer.observe(blockchainSection);
+  // Scroll fallback
   window.addEventListener('scroll', () => {
     const rect = blockchainSection.getBoundingClientRect();
     const inView = rect.top < window.innerHeight * 0.7 && rect.bottom > 0;
@@ -403,7 +406,7 @@ window.addEventListener('resize', () => {
     stickyCTA.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
   });
 
-  // Web3 Redemption
+  // Web3
   const ABI = [
     {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnForRedemption","outputs":[],"stateMutability":"nonpayable","type":"function"},
     {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
