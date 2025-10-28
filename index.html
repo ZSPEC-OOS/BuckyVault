@@ -56,12 +56,6 @@
        .btn-primary { background: var(--accent); color: #000; }
        .btn-primary:hover { background: var(--accent-dark); }
        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-       .chain-btn {
-           min-width: 140px; justify-content: center; font-weight: 600; padding: 12px 20px;
-       }
-       .chain-btn.active {
-           background: var(--accent); color: #000; border-color: var(--accent);
-       }
        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 24px 0; }
        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
        th { background: rgba(102,255,255,0.12); font-weight: 600; color: var(--metal); }
@@ -107,12 +101,9 @@
            transition: transform 0.4s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
        }
        .sticky-cta.show { transform: translateY(0); }
-       /* Chain Selector & Single Chart Container */
-       .chain-selector {
-           display: flex; justify-content: center; gap: 12px; margin: 1.5rem 0 1rem; flex-wrap: wrap;
-       }
+       /* Chart Container (Single Ethereum Only) */
        .chart-container {
-           position: relative; min-height: 560px; margin: 0; overflow: hidden;
+           position: relative; min-height: 560px; margin: 1.5rem 0 0; overflow: hidden;
            border-radius: 12px; box-shadow: var(--glow); background: rgba(15,15,20,0.95);
        }
        .chart-title {
@@ -122,11 +113,6 @@
        }
        .chart-iframe {
            position: absolute; inset: 0; width: 100%; height: 100%; border: none;
-           opacity: 0; transition: opacity 0.35s ease; pointer-events: none;
-           top: 0; left: 0;
-       }
-       .chart-iframe.active {
-           opacity: 1; pointer-events: auto;
        }
        @media (max-width: 768px) {
            .hero-title { font-size: 3rem; }
@@ -137,7 +123,6 @@
            .schematic-item { min-width: 100px; padding: 14px 16px; font-size: 0.85rem; }
            .schematic-arrow { font-size: 1.4rem; }
            .chart-container { min-height: 420px; }
-           .chain-btn { width: 100%; margin: 4px 0; }
        }
        :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
    </style>
@@ -248,43 +233,21 @@
        <div class="card">
            <h2 class="section-title">Blockchain Integration</h2>
 
-           <!-- Chain Selector -->
-           <div class="chain-selector">
-               <button class="btn chain-btn" data-chain="ethereum">ETHEREUM</button>
-               <button class="btn chain-btn active" data-chain="polygon">POLYGON</button>
-               <button class="btn chain-btn" data-chain="bnb">BNB</button>
-           </div>
-
-           <!-- Single Chart Container -->
+           <!-- Single Ethereum Chart (No Buttons) -->
            <div class="chart-container">
-               <h3 class="chart-title" id="chart-title">Live DEXT Price & Liquidity (Polygon)</h3>
-
-               <iframe id="iframe-ethereum" class="chart-iframe"
+               <h3 class="chart-title">Live DEXT Price & Liquidity (Ethereum)</h3>
+               <iframe class="chart-iframe"
                    title="DEXTools DEXT Ethereum chart"
                    src="https://www.dextools.io/widget-chart/en/ether/pe-dark/0xfb7b4564402e5500db5bb6d63ae671302777c75a?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
                    loading="lazy" allowfullscreen
                    aria-label="Real-time DEXT price and liquidity on Ethereum">
-               </iframe>
-
-               <iframe id="iframe-polygon" class="chart-iframe active"
-                   title="DEXTools DEXT Polygon chart"
-                   src="https://www.dextools.io/widget-chart/en/polygon/pe-dark/0xadbf1854e5883eb8aa7baf50705338739e558e5b?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
-                   loading="lazy" allowfullscreen
-                   aria-label="Real-time DEXT price and liquidity on Polygon">
-               </iframe>
-
-               <iframe id="iframe-bnb" class="chart-iframe"
-                   title="DEXTools DEXT BNB chart"
-                   src="https://www.dextools.io/widget-chart/en/bsc/pe-dark/0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
-                   loading="lazy" allowfullscreen
-                   aria-label="Real-time DEXT price and liquidity on BNB Chain">
                </iframe>
            </div>
 
            <div style="text-align:center; margin-top: 1.5rem;">
                <button id="trade-btn" class="btn btn-primary" aria-label="Trade DEXT on Uniswap">Trade on Uniswap</button>
                <button class="btn" aria-label="View contract on PolygonScan" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS')">View Contract</button>
-               <button class="btn" aria-label="Track liquidity on DexTools" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS')">Track Liquidity</button>
+               <button class="btn" aria-label="Track liquidity on DexTools" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS')">Track Liquidity</..."></button>
                <button class="btn" aria-label="Download project whitepaper" onclick="window.open('whitepaper.pdf')">Download Whitepaper</button>
            </div>
 
@@ -368,7 +331,7 @@ window.addEventListener('resize', () => {
 });
 </script>
 
-<!-- Web3 + Chain Switcher + Trade Button -->
+<!-- Web3 + Trade Button (Ethereum Only) -->
 <script>
   // Toast
   const toast = document.getElementById('toast');
@@ -385,68 +348,11 @@ window.addEventListener('resize', () => {
     stickyCTA.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
   });
 
-  // Chain Switcher
-  const chainButtons = document.querySelectorAll('.chain-btn');
-  const iframes = {
-    ethereum: document.getElementById('iframe-ethereum'),
-    polygon: document.getElementById('iframe-polygon'),
-    bnb: document.getElementById('iframe-bnb')
-  };
-  const chartTitle = document.getElementById('chart-title');
-  const titleMap = {
-    ethereum: 'Live DEXT Price & Liquidity (Ethereum)',
-    polygon: 'Live DEXT Price & Liquidity (Polygon)',
-    bnb: 'Live DEXT Price & Liquidity (BNB Chain)'
-  };
-  const dexToolsMap = {
-    ethereum: 'https://www.dextools.io/widget-chart/en/ether/pe-dark/0xfb7b4564402e5500db5bb6d63ae671302777c75a?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false',
-    polygon: 'https://www.dextools.io/widget-chart/en/polygon/pe-dark/0xadbf1854e5883eb8aa7baf50705338739e558e5b?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false',
-    bnb: 'https://www.dextools.io/widget-chart/en/bsc/pe-dark/0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false'
-  };
-  let currentChain = 'polygon';
-
-  chainButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const chain = btn.dataset.chain;
-      currentChain = chain;
-
-      // Update active button
-      chainButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      // Update iframe src (force reload)
-      Object.keys(iframes).forEach(key => {
-        const iframe = iframes[key];
-        iframe.classList.remove('active');
-        if (key === chain) {
-          iframe.src = dexToolsMap[chain] + '&t=' + Date.now(); // Cache-bust + reload
-          iframe.classList.add('active');
-        }
-      });
-
-      // Update title
-      chartTitle.textContent = titleMap[chain];
-    });
-  });
-
-  // Trade on Uniswap Button (All chains → app.uniswap.org)
+  // Trade on Uniswap (Ethereum + DEXT pre-filled)
   const tradeBtn = document.getElementById('trade-btn');
-  const uniswapBase = 'https://app.uniswap.org/swap';
-  const tokenMap = {
-    ethereum: '0xfb7b4564402e5500db5bb6d63ae671302777c75a', // DEXT on Ethereum (Uniswap V2)
-    polygon: '0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c', // Placeholder - DEXT not on Polygon
-    bnb: '0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034' // DEXT on BNB (PancakeSwap) - fallback to Uniswap with token
-  };
+  const DEXT_ETHEREUM = '0xfb7b4564402e5500db5bb6d63ae671302777c75a';
   tradeBtn.addEventListener('click', () => {
-    let url = uniswapBase;
-    if (currentChain === 'polygon') {
-      url += `?chain=polygon&outputCurrency=${tokenMap.polygon}`;
-    } else if (currentChain === 'ethereum') {
-      url += `?chain=mainnet&outputCurrency=${tokenMap.ethereum}`;
-    } else {
-      // BNB → Use PancakeSwap (Uniswap doesn't support)
-      url = `https://pancakeswap.finance/swap?outputCurrency=${tokenMap.bnb}`;
-    }
+    const url = `https://app.uniswap.org/swap?chain=mainnet&outputCurrency=${DEXT_ETHEREUM}`;
     window.open(url, '_blank');
   });
 
