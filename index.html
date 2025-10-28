@@ -57,7 +57,7 @@
        .btn-primary:hover { background: var(--accent-dark); }
        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
        .chain-btn {
-           min-width: 140px; justify-content: center; font-weight: 600;
+           min-width: 140px; justify-content: center; font-weight: 600; padding: 12px 20px;
        }
        .chain-btn.active {
            background: var(--accent); color: #000; border-color: var(--accent);
@@ -107,13 +107,22 @@
            transition: transform 0.4s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
        }
        .sticky-cta.show { transform: translateY(0); }
-       /* Live Chart Styles */
-       .chain-selector { display: flex; justify-content: center; gap: 12px; margin: 2rem 0; flex-wrap: wrap; }
-       .chart-wrapper { margin: 2.5rem 0; opacity: 0; transition: opacity 0.4s ease; }
-       .chart-wrapper.active { opacity: 1; }
-       .chart-wrapper h3 { color: var(--metal); text-align: center; margin-bottom: 1rem; font-size: 1.6rem; }
-       .chart-wrapper iframe { 
-           width: 100%; min-height: 500px; border: none; border-radius: 12px; 
+       /* Chain Selector & Charts */
+       .chain-selector {
+           display: flex; justify-content: center; gap: 12px; margin: 1.5rem 0; flex-wrap: wrap;
+       }
+       .chart-wrapper {
+           margin: 1.5rem 0; opacity: 0; visibility: hidden; height: 0; overflow: hidden;
+           transition: opacity 0.4s ease, height 0.4s ease;
+       }
+       .chart-wrapper.active {
+           opacity: 1; visibility: visible; height: auto;
+       }
+       .chart-wrapper h3 {
+           color: var(--metal); text-align: center; margin-bottom: 1rem; font-size: 1.5rem;
+       }
+       .chart-wrapper iframe {
+           width: 100%; min-height: 500px; border: none; border-radius: 12px;
            box-shadow: var(--glow); background: rgba(15,15,20,0.95);
        }
        @media (max-width: 768px) {
@@ -238,8 +247,8 @@
 
            <!-- Chain Selector -->
            <div class="chain-selector">
-               <button class="btn chain-btn active" data-chain="ethereum">ETHEREUM</button>
-               <button class="btn chain-btn" data-chain="polygon">POLYGON</button>
+               <button class="btn chain-btn" data-chain="ethereum">ETHEREUM</button>
+               <button class="btn chain-btn active" data-chain="polygon">POLYGON</button>
                <button class="btn chain-btn" data-chain="bnb">BNB</button>
            </div>
 
@@ -248,7 +257,7 @@
                <h3>Live DEXT Price & Liquidity (Ethereum)</h3>
                <iframe
                    title="DEXTools DEXT Ethereum chart"
-                   src="https://www.dextools.io/widget-chart/en/ether/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
+                   src="https://www.dextools.io/widget-chart/en/ether/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
                    loading="lazy"
                    allowfullscreen
                    aria-label="Real-time DEXT price and liquidity on Ethereum">
@@ -277,12 +286,13 @@
                </iframe>
            </div>
 
-           <div style="text-align:center; margin-top: 2rem;">
+           <div style="text-align:center; margin-top: 1.5rem;">
                <button class="btn btn-primary" aria-label="Swap FUL60 on Uniswap" onclick="window.open('https://app.uniswap.org/swap?chain=polygon&inputCurrency=0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270&outputCurrency=YOUR_FUL60_ADDRESS')">Swap on Uniswap</button>
                <button class="btn" aria-label="View contract on PolygonScan" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS')">View Contract</button>
                <button class="btn" aria-label="Track liquidity on DexTools" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS')">Track Liquidity</button>
                <button class="btn" aria-label="Download project whitepaper" onclick="window.open('whitepaper.pdf')">Download Whitepaper</button>
            </div>
+
            <div class="logo-grid">
                <img src="https://polygon.technology/_nuxt/img/polygon-logo.88a7f14.svg" alt="Polygon" loading="lazy">
                <img src="https://uniswap.org/images/uniswap-logo.svg" alt="Uniswap" loading="lazy">
@@ -381,26 +391,20 @@ window.addEventListener('resize', () => {
   });
 
   // Chain Switcher
-  const chainButtons = document.querySelectorAll('.chain-btn');
-  const chartWrappers = document.querySelectorAll('.chart-wrapper');
-  chainButtons.forEach(btn => {
+  document.querySelectorAll('.chain-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const chain = btn.dataset.chain;
-      // Update active button
-      chainButtons.forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.chain-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      // Show selected chart
-      chartWrappers.forEach(wrapper => {
+      document.querySelectorAll('.chart-wrapper').forEach(wrapper => {
         wrapper.classList.remove('active');
-        if (wrapper.id === `chart-${chain}`) {
-          wrapper.classList.add('active');
-        }
+        if (wrapper.id === `chart-${chain}`) wrapper.classList.add('active');
       });
     });
   });
 
   // Web3
-  const CONTRACT_ADDRESS = 'YOUR_FUL60_CONTRACT_ADDRESS'; // REPLACE
+  const CONTRACT_ADDRESS = 'YOUR_FUL60_CONTRACT_ADDRESS';
   const ABI = [
     {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnForRedemption","outputs":[],"stateMutability":"nonpayable","type":"function"},
     {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
