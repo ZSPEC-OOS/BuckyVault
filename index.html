@@ -101,18 +101,19 @@
            transition: transform 0.4s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
        }
        .sticky-cta.show { transform: translateY(0); }
-       /* Chart Container (Single Ethereum Only) */
+       /* Chart Container (Fixed: Title + Graph Spacing) */
        .chart-container {
-           position: relative; min-height: 560px; margin: 1.5rem 0 0; overflow: hidden;
+           position: relative; min-height: 580px; margin: 2rem 0 0; overflow: hidden;
            border-radius: 12px; box-shadow: var(--glow); background: rgba(15,15,20,0.95);
        }
        .chart-title {
            position: relative; text-align: center; color: var(--metal); font-size: 1.5rem;
-           margin: 0 0 1rem 0; padding: 16px 0 0; z-index: 2; pointer-events: none;
+           margin: 0 0 1.5rem 0; padding: 20px 0 0; z-index: 2; pointer-events: none;
            text-shadow: 0 0 8px rgba(0,0,0,0.6);
        }
        .chart-iframe {
            position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+           top: 0; left: 0;
        }
        @media (max-width: 768px) {
            .hero-title { font-size: 3rem; }
@@ -122,7 +123,7 @@
            .schematic { gap: 12px; }
            .schematic-item { min-width: 100px; padding: 14px 16px; font-size: 0.85rem; }
            .schematic-arrow { font-size: 1.4rem; }
-           .chart-container { min-height: 420px; }
+           .chart-container { min-height: 440px; }
        }
        :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
    </style>
@@ -233,7 +234,7 @@
        <div class="card">
            <h2 class="section-title">Blockchain Integration</h2>
 
-           <!-- Single Ethereum Chart (No Buttons) -->
+           <!-- Ethereum Chart Only -->
            <div class="chart-container">
                <h3 class="chart-title">Live DEXT Price & Liquidity (Ethereum)</h3>
                <iframe class="chart-iframe"
@@ -247,7 +248,7 @@
            <div style="text-align:center; margin-top: 1.5rem;">
                <button id="trade-btn" class="btn btn-primary" aria-label="Trade DEXT on Uniswap">Trade on Uniswap</button>
                <button class="btn" aria-label="View contract on PolygonScan" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS')">View Contract</button>
-               <button class="btn" aria-label="Track liquidity on DexTools" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS')">Track Liquidity</..."></button>
+               <button class="btn" aria-label="Track liquidity on DexTools" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS')">Track Liquidity</button>
                <button class="btn" aria-label="Download project whitepaper" onclick="window.open('whitepaper.pdf')">Download Whitepaper</button>
            </div>
 
@@ -270,7 +271,7 @@
 
 <!-- Sticky CTA (mobile) -->
 <div class="sticky-cta" id="sticky-cta">
-   <button class="btn btn-primary" onclick="document.querySelector('#blockchain').scrollIntoView({behavior:'smooth'})">Trade</button>
+   <button id="sticky-trade-btn" class="btn btn-primary" onclick="document.querySelector('#blockchain').scrollIntoView({behavior:'smooth'})">Trade</button>
    <button class="btn" id="sticky-redeem" style="display:none;" onclick="document.querySelector('#redeem-btn').click()">Redeem</button>
 </div>
 
@@ -331,7 +332,7 @@ window.addEventListener('resize', () => {
 });
 </script>
 
-<!-- Web3 + Trade Button (Ethereum Only) -->
+<!-- Web3 + Trade Button + Sticky CTA Logic -->
 <script>
   // Toast
   const toast = document.getElementById('toast');
@@ -343,16 +344,38 @@ window.addEventListener('resize', () => {
 
   // Sticky CTA
   const stickyCTA = document.getElementById('sticky-cta');
+  const stickyTradeBtn = document.getElementById('sticky-trade-btn');
   const stickyRedeem = document.getElementById('sticky-redeem');
+  const blockchainSection = document.getElementById('blockchain');
+  const tradeBtnUnderGraph = document.getElementById('trade-btn');
+
+  // Hide sticky "Trade" when #blockchain is visible
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        stickyTradeBtn.style.display = 'none';
+      } else {
+        stickyTradeBtn.style.display = 'inline-flex';
+      }
+    });
+  }, { threshold: 0.3 });
+  observer.observe(blockchainSection);
+
+  // Scroll handler fallback
   window.addEventListener('scroll', () => {
+    const rect = blockchainSection.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.7 && rect.bottom > 0) {
+      stickyTradeBtn.style.display = 'none';
+    } else {
+      stickyTradeBtn.style.display = 'inline-flex';
+    }
     stickyCTA.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
   });
 
-  // Trade on Uniswap (Ethereum + DEXT pre-filled)
-  const tradeBtn = document.getElementById('trade-btn');
-  const DEXT_ETHEREUM = '0xfb7b4564402e5500db5bb6d63ae671302777c75a';
-  tradeBtn.addEventListener('click', () => {
-    const url = `https://app.uniswap.org/swap?chain=mainnet&outputCurrency=${DEXT_ETHEREUM}`;
+  // Trade on Uniswap: ETH → DEXT (buy DEXT with ETH)
+  tradeBtnUnderGraph.addEventListener('click', () => {
+    const DEXT_ETHEREUM = '0xfb7b4564402e5500db5bb6d63ae671302777c75a';
+    const url = `https://app.uniswap.org/swap?chain=mainnet&inputCurrency=ETH&outputCurrency=${DEXT_ETHEREUM}`;
     window.open(url, '_blank');
   });
 
