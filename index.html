@@ -107,23 +107,25 @@
            transition: transform 0.4s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
        }
        .sticky-cta.show { transform: translateY(0); }
-       /* Chain Selector & Charts */
+       /* Chain Selector & Single Chart Container */
        .chain-selector {
-           display: flex; justify-content: center; gap: 12px; margin: 1.5rem 0; flex-wrap: wrap;
+           display: flex; justify-content: center; gap: 12px; margin: 1.5rem 0 1rem; flex-wrap: wrap;
        }
-       .chart-wrapper {
-           margin: 1.5rem 0; opacity: 0; visibility: hidden; height: 0; overflow: hidden;
-           transition: opacity 0.4s ease, height 0.4s ease;
+       .chart-container {
+           position: relative; min-height: 500px; margin: 0; overflow: hidden;
+           border-radius: 12px; box-shadow: var(--glow); background: rgba(15,15,20,0.95);
        }
-       .chart-wrapper.active {
-           opacity: 1; visibility: visible; height: auto;
+       .chart-container h3 {
+           position: absolute; top: 16px; left: 0; width: 100%; text-align: center;
+           color: var(--metal); font-size: 1.5rem; z-index: 2; pointer-events: none;
+           text-shadow: 0 0 8px rgba(0,0,0,0.6);
        }
-       .chart-wrapper h3 {
-           color: var(--metal); text-align: center; margin-bottom: 1rem; font-size: 1.5rem;
+       .chart-iframe {
+           position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+           opacity: 0; transition: opacity 0.35s ease; pointer-events: none;
        }
-       .chart-wrapper iframe {
-           width: 100%; min-height: 500px; border: none; border-radius: 12px;
-           box-shadow: var(--glow); background: rgba(15,15,20,0.95);
+       .chart-iframe.active {
+           opacity: 1; pointer-events: auto;
        }
        @media (max-width: 768px) {
            .hero-title { font-size: 3rem; }
@@ -133,7 +135,7 @@
            .schematic { gap: 12px; }
            .schematic-item { min-width: 100px; padding: 14px 16px; font-size: 0.85rem; }
            .schematic-arrow { font-size: 1.4rem; }
-           .chart-wrapper iframe { min-height: 360px; }
+           .chart-container { min-height: 360px; }
            .chain-btn { width: 100%; margin: 4px 0; }
        }
        :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -252,36 +254,28 @@
                <button class="btn chain-btn" data-chain="bnb">BNB</button>
            </div>
 
-           <!-- Live Charts -->
-           <div id="chart-ethereum" class="chart-wrapper">
-               <h3>Live DEXT Price & Liquidity (Ethereum)</h3>
-               <iframe
+           <!-- Single Chart Container (All iframes layered) -->
+           <div class="chart-container">
+               <h3 id="chart-title">Live DEXT Price & Liquidity (Polygon)</h3>
+
+               <iframe id="iframe-ethereum" class="chart-iframe"
                    title="DEXTools DEXT Ethereum chart"
-                   src="https://www.dextools.io/widget-chart/en/ether/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
-                   loading="lazy"
-                   allowfullscreen
+                   src="https://www.dextools.io/widget-chart/en/ether/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
+                   loading="lazy" allowfullscreen
                    aria-label="Real-time DEXT price and liquidity on Ethereum">
                </iframe>
-           </div>
 
-           <div id="chart-polygon" class="chart-wrapper active">
-               <h3>Live DEXT Price & Liquidity (Polygon)</h3>
-               <iframe
+               <iframe id="iframe-polygon" class="chart-iframe active"
                    title="DEXTools DEXT Polygon chart"
                    src="https://www.dextools.io/widget-chart/en/polygon/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
-                   loading="lazy"
-                   allowfullscreen
+                   loading="lazy" allowfullscreen
                    aria-label="Real-time DEXT price and liquidity on Polygon">
                </iframe>
-           </div>
 
-           <div id="chart-bnb" class="chart-wrapper">
-               <h3>Live DEXT Price & Liquidity (BNB Chain)</h3>
-               <iframe
+               <iframe id="iframe-bnb" class="chart-iframe"
                    title="DEXTools DEXT BNB chart"
                    src="https://www.dextools.io/widget-chart/en/bsc/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
-                   loading="lazy"
-                   allowfullscreen
+                   loading="lazy" allowfullscreen
                    aria-label="Real-time DEXT price and liquidity on BNB Chain">
                </iframe>
            </div>
@@ -391,15 +385,34 @@ window.addEventListener('resize', () => {
   });
 
   // Chain Switcher
-  document.querySelectorAll('.chain-btn').forEach(btn => {
+  const chainButtons = document.querySelectorAll('.chain-btn');
+  const iframes = {
+    ethereum: document.getElementById('iframe-ethereum'),
+    polygon: document.getElementById('iframe-polygon'),
+    bnb: document.getElementById('iframe-bnb')
+  };
+  const chartTitle = document.getElementById('chart-title');
+  const titleMap = {
+    ethereum: 'Live DEXT Price & Liquidity (Ethereum)',
+    polygon: 'Live DEXT Price & Liquidity (Polygon)',
+    bnb: 'Live DEXT Price & Liquidity (BNB Chain)'
+  };
+
+  chainButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const chain = btn.dataset.chain;
-      document.querySelectorAll('.chain-btn').forEach(b => b.classList.remove('active'));
+
+      // Update active button
+      chainButtons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      document.querySelectorAll('.chart-wrapper').forEach(wrapper => {
-        wrapper.classList.remove('active');
-        if (wrapper.id === `chart-${chain}`) wrapper.classList.add('active');
+
+      // Update iframe visibility
+      Object.keys(iframes).forEach(key => {
+        iframes[key].classList.toggle('active', key === chain);
       });
+
+      // Update title
+      chartTitle.textContent = titleMap[chain];
     });
   });
 
