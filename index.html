@@ -101,20 +101,41 @@
            transition: transform 0.4s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
        }
        .sticky-cta.show { transform: translateY(0); }
-       /* Chart Container — Graph Pushed Down */
+
+       /* REVISED CHART STYLES */
        .chart-container {
-           position: relative; min-height: 600px; margin: 3rem 0 0; overflow: hidden;
-           border-radius: 12px; box-shadow: var(--glow); background: rgba(15,15,20,0.95);
+           position: relative;
+           min-height: 600px;
+           margin: 3rem 0 0;
+           overflow: hidden;
+           border-radius: 12px;
+           box-shadow: var(--glow);
+           background: rgba(15,15,20,0.95);
+           padding-top: 80px; /* Dedicated title band */
        }
        .chart-title {
-           position: relative; text-align: center; color: var(--metal); font-size: 1.5rem;
-           margin: 0 0 2rem 0; padding: 32px 0 0; z-index: 2; pointer-events: none;
+           position: absolute;
+           top: 20px;
+           left: 0;
+           right: 0;
+           text-align: center;
+           color: var(--metal);
+           font-size: 1.5rem;
+           margin: 0;
+           z-index: 2;
+           pointer-events: none;
            text-shadow: 0 0 8px rgba(0,0,0,0.6);
        }
        .chart-iframe {
-           position: absolute; inset: 0; width: 100%; height: 100%; border: none;
-           top: 60px; left: 0; /* Forces iframe down below title */
+           position: absolute;
+           inset: 0;
+           width: 100%;
+           height: calc(100% - 80px);
+           border: none;
+           top: 80px;
+           left: 0;
        }
+
        @media (max-width: 768px) {
            .hero-title { font-size: 3rem; }
            .grid-2 { grid-template-columns: 1fr; }
@@ -123,18 +144,17 @@
            .schematic { gap: 12px; }
            .schematic-item { min-width: 100px; padding: 14px 16px; font-size: 0.85rem; }
            .schematic-arrow { font-size: 1.4rem; }
-           .chart-container { min-height: 460px; }
-           .chart-iframe { top: 50px; }
+           .chart-container { min-height: 460px; padding-top: 70px; }
+           .chart-iframe { top: 70px; height: calc(100% - 70px); }
+           .chart-title { top: 15px; font-size: 1.3rem; }
        }
        :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
    </style>
 </head>
 <body>
 <canvas class="molecule-canvas" id="moleculeCanvas" aria-hidden="true"></canvas>
-
 <!-- Toast Notification -->
 <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
-
 <section id="hero">
    <div class="container">
        <h1 class="hero-title">BuckyVault</h1>
@@ -145,7 +165,6 @@
        </div>
    </div>
 </section>
-
 <section id="about">
    <div class="container">
        <div class="card">
@@ -167,7 +186,6 @@
        </div>
    </div>
 </section>
-
 <section id="assay-vault">
    <div class="container">
        <h2 class="section-title">Custody & Verification</h2>
@@ -183,7 +201,6 @@
        </div>
    </div>
 </section>
-
 <section id="tokenomics">
    <div class="container">
        <div class="card">
@@ -208,7 +225,6 @@
        </div>
    </div>
 </section>
-
 <section id="redemption">
    <div class="container">
        <div class="card">
@@ -229,12 +245,10 @@
        </div>
    </div>
 </section>
-
 <section id="blockchain">
    <div class="container">
        <div class="card">
            <h2 class="section-title">Blockchain Integration</h2>
-
            <!-- Ethereum Chart Only — Graph Pushed Down -->
            <div class="chart-container">
                <h3 class="chart-title">Live ETH Price & Liquidity (Ethereum)</h3>
@@ -245,14 +259,12 @@
                    aria-label="Real-time ETH price and liquidity on Ethereum">
                </iframe>
            </div>
-
            <div style="text-align:center; margin-top: 1.5rem;">
                <button id="trade-btn" class="btn btn-primary" aria-label="Trade ETH on Uniswap">Trade on Uniswap</button>
                <button class="btn" aria-label="View contract on PolygonScan" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS')">View Contract</button>
                <button class="btn" aria-label="Track liquidity on DexTools" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS')">Track Liquidity</button>
                <button class="btn" aria-label="Download project whitepaper" onclick="window.open('whitepaper.pdf')">Download Whitepaper</button>
            </div>
-
            <div class="logo-grid">
                <img src="https://polygon.technology/_nuxt/img/polygon-logo.88a7f14.svg" alt="Polygon" loading="lazy">
                <img src="https://uniswap.org/images/uniswap-logo.svg" alt="Uniswap" loading="lazy">
@@ -261,21 +273,18 @@
        </div>
    </div>
 </section>
-
 <footer>
    © 2025 BuckyVault. All rights reserved.<br>
    Class III Vault | Polygon ERC-20 | Lab-Verified.<br>
-   <a href="mailto:info@buckyvault.xyz" style="color:var(--accent);">info@buckyvault.xyz</a> | 
-   <a href="/privacy" style="color:var(--text-muted);">Privacy</a> | 
+   <a href="mailto:info@buckyvault.xyz" style="color:var(--accent);">info@buckyvault.xyz</a> |
+   <a href="/privacy" style="color:var(--text-muted);">Privacy</a> |
    <a href="/terms" style="color:var(--text-muted);">Terms</a>
 </footer>
-
 <!-- Sticky CTA (mobile) -->
 <div class="sticky-cta" id="sticky-cta">
    <button id="sticky-trade-btn" class="btn btn-primary" onclick="document.querySelector('#blockchain').scrollIntoView({behavior:'smooth'})">Trade</button>
    <button class="btn" id="sticky-redeem" style="display:none;" onclick="document.querySelector('#redeem-btn').click()">Redeem</button>
 </div>
-
 <!-- C60 Animation -->
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js';
@@ -332,7 +341,6 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 </script>
-
 <!-- Web3 + Trade Button + Sticky CTA Logic -->
 <script>
   // Toast
@@ -342,13 +350,11 @@ window.addEventListener('resize', () => {
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), duration);
   }
-
   // Sticky CTA
   const stickyCTA = document.getElementById('sticky-cta');
   const stickyTradeBtn = document.getElementById('sticky-trade-btn');
   const stickyRedeem = document.getElementById('sticky-redeem');
   const blockchainSection = document.getElementById('blockchain');
-
   // Hide sticky "Trade" when #blockchain is visible
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -356,7 +362,6 @@ window.addEventListener('resize', () => {
     });
   }, { threshold: 0.3 });
   observer.observe(blockchainSection);
-
   // Scroll fallback
   window.addEventListener('scroll', () => {
     const rect = blockchainSection.getBoundingClientRect();
@@ -364,14 +369,12 @@ window.addEventListener('resize', () => {
     stickyTradeBtn.style.display = inView ? 'none' : 'inline-flex';
     stickyCTA.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
   });
-
   // Trade on Uniswap: Empty → ETH (buy ETH, sell empty)
   const tradeBtnUnderGraph = document.getElementById('trade-btn');
   tradeBtnUnderGraph.addEventListener('click', () => {
     const url = `https://app.uniswap.org/swap?chain=mainnet&outputCurrency=ETH`;
     window.open(url, '_blank');
   });
-
   // Web3
   const CONTRACT_ADDRESS = 'YOUR_FUL60_CONTRACT_ADDRESS';
   const ABI = [
@@ -384,7 +387,6 @@ window.addEventListener('resize', () => {
   const statusEl = document.getElementById('web3-status');
   const connectBtn = document.getElementById('connect-wallet');
   const redeemBtn = document.getElementById('redeem-btn');
-
   connectBtn.addEventListener('click', async () => {
     if (!window.ethereum) return showToast('MetaMask required');
     try {
@@ -415,7 +417,6 @@ window.addEventListener('resize', () => {
       connectBtn.textContent = 'Connect Wallet';
     }
   });
-
   redeemBtn.addEventListener('click', async () => {
     if (!contract) return showToast('Connect wallet first');
     const amount = prompt('Tokens to redeem (min 1000):');
