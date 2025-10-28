@@ -261,7 +261,7 @@
 
                <iframe id="iframe-ethereum" class="chart-iframe"
                    title="DEXTools DEXT Ethereum chart"
-                   src="https://www.dextools.io/widget-chart/en/ether/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
+                   src="https://www.dextools.io/widget-chart/en/ether/pe-dark/0xfb7b4564402e5500db5bb6d63ae671302777c75a?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
                    loading="lazy" allowfullscreen
                    aria-label="Real-time DEXT price and liquidity on Ethereum">
                </iframe>
@@ -275,7 +275,7 @@
 
                <iframe id="iframe-bnb" class="chart-iframe"
                    title="DEXTools DEXT BNB chart"
-                   src="https://www.dextools.io/widget-chart/en/bsc/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
+                   src="https://www.dextools.io/widget-chart/en/bsc/pe-dark/0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
                    loading="lazy" allowfullscreen
                    aria-label="Real-time DEXT price and liquidity on BNB Chain">
                </iframe>
@@ -399,9 +399,9 @@ window.addEventListener('resize', () => {
     bnb: 'Live DEXT Price & Liquidity (BNB Chain)'
   };
   const dexToolsMap = {
-    ethereum: 'https://www.dextools.io/widget-chart/en/ether/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false',
+    ethereum: 'https://www.dextools.io/widget-chart/en/ether/pe-dark/0xfb7b4564402e5500db5bb6d63ae671302777c75a?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false',
     polygon: 'https://www.dextools.io/widget-chart/en/polygon/pe-dark/0xadbf1854e5883eb8aa7baf50705338739e558e5b?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false',
-    bnb: 'https://www.dextools.io/widget-chart/en/bsc/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false'
+    bnb: 'https://www.dextools.io/widget-chart/en/bsc/pe-dark/0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false'
   };
   let currentChain = 'polygon';
 
@@ -419,8 +419,8 @@ window.addEventListener('resize', () => {
         const iframe = iframes[key];
         iframe.classList.remove('active');
         if (key === chain) {
-          iframe.src = dexToolsMap[chain]; // Reload fresh
-          iframe.classList.add('  active');
+          iframe.src = dexToolsMap[chain] + '&t=' + Date.now(); // Cache-bust + reload
+          iframe.classList.add('active');
         }
       });
 
@@ -429,13 +429,13 @@ window.addEventListener('resize', () => {
     });
   });
 
-  // Trade on Uniswap Button
+  // Trade on Uniswap Button (All chains → app.uniswap.org)
   const tradeBtn = document.getElementById('trade-btn');
   const uniswapBase = 'https://app.uniswap.org/swap';
   const tokenMap = {
-    ethereum: '0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c', // Placeholder
-    polygon: '0xadbf1854e5883eb8aa7baf50705338739e558e5b', // Pair-based, Uniswap V3
-    bnb: '0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c' // Placeholder for BNB (PancakeSwap fallback)
+    ethereum: '0xfb7b4564402e5500db5bb6d63ae671302777c75a', // DEXT on Ethereum (Uniswap V2)
+    polygon: '0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c', // Placeholder - DEXT not on Polygon
+    bnb: '0xe20b9e246db5a0d21bf9209e4858bc9a3ff7a034' // DEXT on BNB (PancakeSwap) - fallback to Uniswap with token
   };
   tradeBtn.addEventListener('click', () => {
     let url = uniswapBase;
@@ -444,7 +444,7 @@ window.addEventListener('resize', () => {
     } else if (currentChain === 'ethereum') {
       url += `?chain=mainnet&outputCurrency=${tokenMap.ethereum}`;
     } else {
-      // BNB: Redirect to PancakeSwap (Uniswap doesn't support)
+      // BNB → Use PancakeSwap (Uniswap doesn't support)
       url = `https://pancakeswap.finance/swap?outputCurrency=${tokenMap.bnb}`;
     }
     window.open(url, '_blank');
