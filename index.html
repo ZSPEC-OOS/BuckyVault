@@ -130,7 +130,7 @@
            position: absolute;
            inset: 0;
            width: 100%;
-           height: calc(100% - 80px advises);
+           height: calc(100% - 80px);
            border: none;
            top: 80px;
            left: 0;
@@ -160,8 +160,8 @@
        <h1 class="hero-title">BuckyVault</h1>
        <p class="hero-subtitle">Audited fullerene custody. ERC-20 tokens backed by physical C₆₀ in nitrogen-sealed Class III vaults.</p>
        <div style="margin-top: 40px;">
-           <button class="btn btn-primary" aria-label="Buy, sell & trade Ethereum and other top tokens on Uniswap" id="hero-trade-btn">
-               Buy, sell & trade Ethereum and other top tokens on Uniswap
+           <button class="btn btn-primary" aria-label="Trade FUL60 on Uniswap" id="hero-trade-btn">
+               Trade on Uniswap
            </button>
            <button class="btn" aria-label="View FUL60 on PolygonScan" onclick="location.href='#blockchain'">
                View on PolygonScan
@@ -229,8 +229,8 @@
                <button class="btn" aria-label="View smart contract on PolygonScan" onclick="location.href='#blockchain'">
                    View Contract
                </button>
-               <button class="btn btn-primary" aria-label="Buy, sell & trade Ethereum and other top tokens on Uniswap" id="trade-btn">
-                   Buy, sell & trade Ethereum and other top tokens on Uniswap
+               <button class="btn btn-primary" aria-label="Trade FUL60 on Uniswap" id="trade-btn">
+                   Trade on Uniswap
                </button>
                <button class="btn" aria-label="Track liquidity on DexTools" onclick="location.href='#blockchain'">
                    Track on DexTools
@@ -274,8 +274,8 @@
                </iframe>
            </div>
            <div style="text-align:center; margin-top: 1.5rem;">
-               <button id="trade-btn" class="btn btn-primary" aria-label="Buy, sell & trade Ethereum and other top tokens on Uniswap">
-                   Buy, sell & trade Ethereum and other top tokens on Uniswap
+               <button id="trade-btn" class="btn btn-primary" aria-label="Trade FUL60 on Uniswap">
+                   Trade on Uniswap
                </button>
                <button class="btn" aria-label="View contract on PolygonScan" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS')">
                    View Contract
@@ -305,7 +305,7 @@
 <!-- Sticky CTA (mobile) -->
 <div class="sticky-cta" id="sticky-cta">
    <button id="sticky-trade-btn" class="btn btn-primary">
-       Buy, sell & trade Ethereum and other top tokens on Uniswap
+       Trade
    </button>
    <button class="btn" id="sticky-redeem" style="display:none;" onclick="document.querySelector('#redeem-btn').click()">
        Redeem
@@ -377,7 +377,7 @@ window.addEventListener('resize', () => {
     setTimeout(() => toast.classList.remove('show'), duration);
   }
 
-  // Unified Trade
+  // Unified Trade: ETH in "From", "To" blank
   function openUniswapTrade() {
     const url = `https://app.uniswap.org/swap?chain=polygon&inputCurrency=ETH`;
     window.open(url, '_blank');
@@ -386,7 +386,7 @@ window.addEventListener('resize', () => {
   document.getElementById('trade-btn')?.addEventListener('click', openUniswapTrade);
   document.getElementById('sticky-trade-btn')?.addEventListener('click', openUniswapTrade);
 
-  // Sticky CTA
+  // Sticky CTA visibility
   const stickyCTA = document.getElementById('sticky-cta');
   const stickyTradeBtn = document.getElementById('sticky-trade-btn');
   const stickyRedeem = document.getElementById('sticky-redeem');
@@ -404,7 +404,7 @@ window.addEventListener('resize', () => {
     stickyCTA.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
   });
 
-  // Web3
+  // Web3 Redemption
   const ABI = [
     {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnForRedemption","outputs":[],"stateMutability":"nonpayable","type":"function"},
     {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
@@ -412,7 +412,7 @@ window.addEventListener('resize', () => {
     {"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"}
   ];
   let web3, account, contract;
-  const FUL60_CONTRACT = 'YOUR_FUL60_CONTRACT_ADDRESS';
+  const FUL60_CONTRACT = 'YOUR_FUL60_CONTRACT_ADDRESS'; // REPLACE POST-DEPLOYMENT
   const statusEl = document.getElementById('web3-status');
   const connectBtn = document.getElementById('connect-wallet');
   const redeemBtn = document.getElementById('redeem-btn');
