@@ -112,17 +112,18 @@
            display: flex; justify-content: center; gap: 12px; margin: 1.5rem 0 1rem; flex-wrap: wrap;
        }
        .chart-container {
-           position: relative; min-height: 500px; margin: 0; overflow: hidden;
+           position: relative; min-height: 560px; margin: 0; overflow: hidden;
            border-radius: 12px; box-shadow: var(--glow); background: rgba(15,15,20,0.95);
        }
-       .chart-container h3 {
-           position: absolute; top: 16px; left: 0; width: 100%; text-align: center;
-           color: var(--metal); font-size: 1.5rem; z-index: 2; pointer-events: none;
+       .chart-title {
+           position: relative; text-align: center; color: var(--metal); font-size: 1.5rem;
+           margin: 0 0 1rem 0; padding: 16px 0 0; z-index: 2; pointer-events: none;
            text-shadow: 0 0 8px rgba(0,0,0,0.6);
        }
        .chart-iframe {
            position: absolute; inset: 0; width: 100%; height: 100%; border: none;
            opacity: 0; transition: opacity 0.35s ease; pointer-events: none;
+           top: 0; left: 0;
        }
        .chart-iframe.active {
            opacity: 1; pointer-events: auto;
@@ -135,7 +136,7 @@
            .schematic { gap: 12px; }
            .schematic-item { min-width: 100px; padding: 14px 16px; font-size: 0.85rem; }
            .schematic-arrow { font-size: 1.4rem; }
-           .chart-container { min-height: 360px; }
+           .chart-container { min-height: 420px; }
            .chain-btn { width: 100%; margin: 4px 0; }
        }
        :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -254,20 +255,20 @@
                <button class="btn chain-btn" data-chain="bnb">BNB</button>
            </div>
 
-           <!-- Single Chart Container (All iframes layered) -->
+           <!-- Single Chart Container -->
            <div class="chart-container">
-               <h3 id="chart-title">Live DEXT Price & Liquidity (Polygon)</h3>
+               <h3 class="chart-title" id="chart-title">Live DEXT Price & Liquidity (Polygon)</h3>
 
                <iframe id="iframe-ethereum" class="chart-iframe"
                    title="DEXTools DEXT Ethereum chart"
-                   src="https://www.dextools.io/widget-chart/en/ether/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
+                   src="https://www.dextools.io/widget-chart/en/ether/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
                    loading="lazy" allowfullscreen
                    aria-label="Real-time DEXT price and liquidity on Ethereum">
                </iframe>
 
                <iframe id="iframe-polygon" class="chart-iframe active"
                    title="DEXTools DEXT Polygon chart"
-                   src="https://www.dextools.io/widget-chart/en/polygon/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
+                   src="https://www.dextools.io/widget-chart/en/polygon/pe-dark/0xadbf1854e5883eb8aa7baf50705338739e558e5b?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
                    loading="lazy" allowfullscreen
                    aria-label="Real-time DEXT price and liquidity on Polygon">
                </iframe>
@@ -281,7 +282,7 @@
            </div>
 
            <div style="text-align:center; margin-top: 1.5rem;">
-               <button class="btn btn-primary" aria-label="Swap FUL60 on Uniswap" onclick="window.open('https://app.uniswap.org/swap?chain=polygon&inputCurrency=0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270&outputCurrency=YOUR_FUL60_ADDRESS')">Swap on Uniswap</button>
+               <button id="trade-btn" class="btn btn-primary" aria-label="Trade DEXT on Uniswap">Trade on Uniswap</button>
                <button class="btn" aria-label="View contract on PolygonScan" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS')">View Contract</button>
                <button class="btn" aria-label="Track liquidity on DexTools" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS')">Track Liquidity</button>
                <button class="btn" aria-label="Download project whitepaper" onclick="window.open('whitepaper.pdf')">Download Whitepaper</button>
@@ -367,7 +368,7 @@ window.addEventListener('resize', () => {
 });
 </script>
 
-<!-- Web3 + Chain Switcher -->
+<!-- Web3 + Chain Switcher + Trade Button -->
 <script>
   // Toast
   const toast = document.getElementById('toast');
@@ -397,23 +398,56 @@ window.addEventListener('resize', () => {
     polygon: 'Live DEXT Price & Liquidity (Polygon)',
     bnb: 'Live DEXT Price & Liquidity (BNB Chain)'
   };
+  const dexToolsMap = {
+    ethereum: 'https://www.dextools.io/widget-chart/en/ether/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false',
+    polygon: 'https://www.dextools.io/widget-chart/en/polygon/pe-dark/0xadbf1854e5883eb8aa7baf50705338739e558e5b?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false',
+    bnb: 'https://www.dextools.io/widget-chart/en/bsc/pe-dark/0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false'
+  };
+  let currentChain = 'polygon';
 
   chainButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const chain = btn.dataset.chain;
+      currentChain = chain;
 
       // Update active button
       chainButtons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
-      // Update iframe visibility
+      // Update iframe src (force reload)
       Object.keys(iframes).forEach(key => {
-        iframes[key].classList.toggle('active', key === chain);
+        const iframe = iframes[key];
+        iframe.classList.remove('active');
+        if (key === chain) {
+          iframe.src = dexToolsMap[chain]; // Reload fresh
+          iframe.classList.add('  active');
+        }
       });
 
       // Update title
       chartTitle.textContent = titleMap[chain];
     });
+  });
+
+  // Trade on Uniswap Button
+  const tradeBtn = document.getElementById('trade-btn');
+  const uniswapBase = 'https://app.uniswap.org/swap';
+  const tokenMap = {
+    ethereum: '0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c', // Placeholder
+    polygon: '0xadbf1854e5883eb8aa7baf50705338739e558e5b', // Pair-based, Uniswap V3
+    bnb: '0x26a6c33c0c0c4c8c2859f8c4c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c8c6c' // Placeholder for BNB (PancakeSwap fallback)
+  };
+  tradeBtn.addEventListener('click', () => {
+    let url = uniswapBase;
+    if (currentChain === 'polygon') {
+      url += `?chain=polygon&outputCurrency=${tokenMap.polygon}`;
+    } else if (currentChain === 'ethereum') {
+      url += `?chain=mainnet&outputCurrency=${tokenMap.ethereum}`;
+    } else {
+      // BNB: Redirect to PancakeSwap (Uniswap doesn't support)
+      url = `https://pancakeswap.finance/swap?outputCurrency=${tokenMap.bnb}`;
+    }
+    window.open(url, '_blank');
   });
 
   // Web3
