@@ -28,10 +28,16 @@
    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
    <style>
        :root {
-           --bg: #0F0F14; --metal: #E0E0E0; --accent: #66FFFF; --accent-dark: #4DCCCC;
-           --text: #F5F5F5; --text-muted: #B0B0D8; --highlight: #4A90E2;
-           --card-bg: linear-gradient(135deg, rgba(25,25,35,0.95), rgba(35,35,50,0.92));
-           --border: rgba(224,224,224,0.3); --glow: 0 0 12px rgba(102,255,255,0.25);
+           --bg: #0F0A1A;               /* Deep indigo */
+           --metal: #E0C0FF;            /* Soft lavender */
+           --accent: #FF1493;           /* Neon pink */
+           --accent-dark: #C71585;      /* Darker pink */
+           --text: #F0E0FF;              /* Light lavender */
+           --text-muted: #B8A0D8;        /* Muted lavender */
+           --highlight: #9B30FF;         /* Indigo */
+           --card-bg: linear-gradient(135deg, rgba(20,15,35,0.95), rgba(30,25,55,0.92));
+           --border: rgba(255,20,147,0.25);
+           --glow: 0 0 12px rgba(255,20,147,0.3);
        }
        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
        body {
@@ -52,35 +58,35 @@
        }
        .btn::before { content: ''; position: absolute; inset: 0; background: var(--accent); opacity: 0; transition: opacity 0.35s; }
        .btn:hover::before { opacity: 0.1; }
-       .btn:hover { background: var(--accent); color: #000; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102,255,255,0.4); }
+       .btn:hover { background: var(--accent); color: #000; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,20,147,0.45); }
        .btn-primary { background: var(--accent); color: #000; }
        .btn-primary:hover { background: var(--accent-dark); }
        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 24px 0; }
        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
-       th { background: rgba(102,255,255,0.12); font-weight: 600; color: var(--metal); }
+       th { background: rgba(255,20,147,0.12); font-weight: 600; color: var(--metal); }
        footer { text-align: center; padding: 60px 20px; font-size: 0.9rem; color: var(--text-muted); border-top: 1px solid var(--border); }
        #hero { min-height: 100vh; display: flex; align-items: center; text-align: center; position: relative; overflow: hidden; }
-       #hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(102,255,255,0.15) 0%, transparent 70%); pointer-events: none; }
+       #hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(255,20,147,0.18) 0%, transparent 70%); pointer-events: none; }
        .hero-title {
            font-size: 4.5rem; margin-bottom: 0.5rem; color: var(--metal);
-           text-shadow: 0 0 20px rgba(102,255,255,0.4), 0 0 40px rgba(102,255,255,0.2);
+           text-shadow: 0 0 20px rgba(255,20,147,0.4), 0 0 40px rgba(255,20,147,0.2);
        }
        .hero-subtitle { font-size: 1.4rem; max-width: 800px; margin: auto; color: var(--text-muted); }
        .molecule-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.32; pointer-events: none; z-index: -1; }
        .section-title {
            font-size: 2.5rem; margin-bottom: 1.5rem; text-align: center; position: relative; color: var(--metal);
-           text-shadow: 0 0 12px rgba(102,255,255,0.3);
+           text-shadow: 0 0 12px rgba(255,20,147,0.3);
        }
-       .section-title::after { content: ''; width: 80px; height: 3px; background: var(--accent); display: block; margin: 16px auto; border-radius: 2px; filter: drop-shadow(0 0 6px rgba(102,255,255,0.5)); }
+       .section-title::after { content: ''; width: 80px; height: 3px; background: var(--accent); display: block; margin: 16px auto; border-radius: 2px; filter: drop-shadow(0 0 6px rgba(255,20,147,0.5)); }
        .schematic { display: flex; justify-content: center; align-items: center; gap: 16px; margin: 48px 0; flex-wrap: nowrap; overflow-x: auto; padding: 16px 0; scrollbar-width: none; }
        .schematic::-webkit-scrollbar { display: none; }
        .schematic-item {
-           min-width: 120px; padding: 18px 24px; background: rgba(102,255,255,0.08); border: 1px dashed var(--border);
+           min-width: 120px; padding: 18px 24px; background: rgba(255,20,147,0.1); border: 1px dashed var(--border);
            border-radius: 12px; text-align: center; font-weight: 600; font-size: 0.95rem; white-space: nowrap;
            transition: all 0.3s ease; color: var(--metal); box-shadow: var(--glow);
        }
-       .schematic-item:hover { background: rgba(102,255,255,0.18); border-color: var(--accent); transform: translateY(-2px); }
+       .schematic-item:hover { background: rgba(255,20,147,0.22); border-color: var(--accent); transform: translateY(-2px); }
        .schematic-arrow { font-size: 1.8rem; color: var(--accent); font-weight: 300; animation: pulse 2s infinite; text-shadow: var(--glow); }
        @keyframes pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 32px; align-items: center; }
@@ -88,7 +94,7 @@
        .logo-grid { display: flex; justify-content: center; gap: 40px; margin: 32px 0; flex-wrap: wrap; }
        .logo-grid img { height: 28px; filter: brightness(1.8); opacity: 0.8; transition: 0.3s; loading: lazy; }
        .logo-grid img:hover { opacity: 1; filter: brightness(2.2); }
-       #web3-status { margin: 20px 0; padding: 12px; background: rgba(102,255,255,0.08); border-radius: 8px; font-family: monospace; color: var(--highlight); min-height: 40px; }
+       #web3-status { margin: 20px 0; padding: 12px; background: rgba(255,20,147,0.08); border-radius: 8px; font-family: monospace; color: var(--highlight); min-height: 40px; }
        .toast {
            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9);
            color: var(--accent); padding: 12px 24px; border-radius: 8px; font-size: 0.9rem; z-index: 1000;
@@ -96,13 +102,11 @@
        }
        .toast.show { opacity: 1; pointer-events: auto; }
        .sticky-cta {
-           position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15,15,20,0.95); backdrop-filter: blur(12px);
+           position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15,10,30,0.95); backdrop-filter: blur(12px);
            padding: 16px; display: flex; justify-content: center; gap: 16px; z-index: 900; transform: translateY(100%);
            transition: transform 0.4s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
        }
        .sticky-cta.show { transform: translateY(0); }
-
-       /* REVISED CHART STYLES */
        .chart-container {
            position: relative;
            min-height: 600px;
@@ -110,7 +114,7 @@
            overflow: hidden;
            border-radius: 12px;
            box-shadow: var(--glow);
-           background: rgba(15,15,20,0.95);
+           background: rgba(15,10,30,0.95);
            padding-top: 80px;
        }
        .chart-title {
@@ -135,7 +139,6 @@
            top: 80px;
            left: 0;
        }
-
        @media (max-width: 768px) {
            .hero-title { font-size: 3rem; }
            .grid-2 { grid-template-columns: 1fr; }
@@ -232,7 +235,7 @@
                <button class="btn" aria-label="View smart contract on PolygonScan" onclick="location.href='#blockchain'">
                    View Contract
                </button>
-               <button class="btn btn-primary" aria-label="Trade FUL60 on Uniswap" id="trade-btn">
+               <button class="btn btn-primary trade-btn" aria-label="Trade FUL60 on Uniswap">
                    Trade on Uniswap
                </button>
                <button class="btn" aria-label="Track liquidity on DexTools" onclick="location.href='#blockchain'">
@@ -266,7 +269,6 @@
    <div class="container">
        <div class="card">
            <h2 class="section-title">Blockchain Integration</h2>
-           <!-- Ethereum Chart Only — Graph Pushed Down -->
            <div class="chart-container">
                <h3 class="chart-title">Live ETH Price & Liquidity (Ethereum)</h3>
                <iframe class="chart-iframe"
@@ -277,7 +279,7 @@
                </iframe>
            </div>
            <div style="text-align:center; margin-top: 1.5rem;">
-               <button id="trade-btn" class="btn btn-primary" aria-label="Trade FUL60 on Uniswap">
+               <button class="btn btn-primary trade-btn" aria-label="Trade FUL60 on Uniswap">
                    Trade on Uniswap
                </button>
                <button class="btn" aria-label="View contract on PolygonScan" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS')">
@@ -354,7 +356,7 @@ bonds.forEach(([a,b], i) => { indices[i*2] = a; indices[i*2+1] = b; });
 const geometry = new THREE.BufferGeometry();
 geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 geometry.setIndex(new THREE.BufferAttribute(indices, 1));
-const material = new THREE.LineBasicMaterial({ color: 0xE0E0E0, opacity: 0.65, transparent: true });
+const material = new THREE.LineBasicMaterial({ color: 0xFF1493, opacity: 0.7, transparent: true });
 const molecule = new THREE.LineSegments(geometry, material);
 scene.add(molecule);
 function animate() {
@@ -379,16 +381,14 @@ window.addEventListener('resize', () => {
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), duration);
   }
-
   // Unified Trade: ETH in "From", "To" blank
   function openUniswapTrade() {
     const url = `https://app.uniswap.org/swap?chain=polygon&inputCurrency=ETH`;
     window.open(url, '_blank');
   }
   document.getElementById('hero-trade-btn')?.addEventListener('click', openUniswapTrade);
-  document.getElementById('trade-btn')?.addEventListener('click', openUniswapTrade);
+  document.querySelectorAll('.trade-btn').forEach(btn => btn.addEventListener('click', openUniswapTrade));
   document.getElementById('sticky-trade-btn')?.addEventListener('click', openUniswapTrade);
-
   // Sticky CTA visibility
   const stickyCTA = document.getElementById('sticky-cta');
   const stickyTradeBtn = document.getElementById('sticky-trade-btn');
@@ -406,7 +406,6 @@ window.addEventListener('resize', () => {
     stickyTradeBtn.style.display = inView ? 'none' : 'inline-flex';
     stickyCTA.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
   });
-
   // Web3 Redemption
   const ABI = [
     {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnForRedemption","outputs":[],"stateMutability":"nonpayable","type":"function"},
@@ -433,10 +432,11 @@ window.addEventListener('resize', () => {
         contract.methods.totalSupply().call(),
         contract.methods.decimals().call()
       ]);
-      const bal = balance / (10 ** decimals);
+      const multiplier = 10 ** decimals;
+      const bal = balance / multiplier;
       statusEl.innerHTML = `Connected: <span style="color:var(--accent);">${account.slice(0,6)}...${account.slice(-4)}</span><br>
                             Balance: <strong>${bal.toFixed(4)} FUL60</strong><br>
-                            Circulating: <strong>${(supply / (10 ** decimals)).toFixed(0)} FUL60</strong>`;
+                            Circulating: <strong>${(supply / multiplier).toFixed(0)} FUL60</strong>`;
       if (bal >= 1000) {
         redeemBtn.style.display = 'inline-flex';
         stickyRedeem.style.display = 'inline-flex';
@@ -456,7 +456,9 @@ window.addEventListener('resize', () => {
     try {
       redeemBtn.disabled = true;
       redeemBtn.textContent = 'Submitting...';
-      await contract.methods.burnForRedemption(web3.utils.toBN(amount * 1e18)).send({ from: account });
+      const decimals = await contract.methods.decimals().call();
+      const multiplier = 10 ** decimals;
+      await contract.methods.burnForRedemption(web3.utils.toBN(amount * multiplier)).send({ from: account });
       showToast('Redemption submitted. Contact support for shipment.');
     } catch (err) {
       showToast('Failed: ' + err.message);
@@ -468,5 +470,3 @@ window.addEventListener('resize', () => {
 </script>
 </body>
 </html>
-
-
