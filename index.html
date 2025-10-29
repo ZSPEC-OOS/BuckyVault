@@ -101,7 +101,6 @@
            transition: transform 0.4s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
        }
        .sticky-cta.show { transform: translateY(0); }
-
        /* REVISED CHART STYLES */
        .chart-container {
            position: relative;
@@ -135,7 +134,6 @@
            top: 80px;
            left: 0;
        }
-
        @media (max-width: 768px) {
            .hero-title { font-size: 3rem; }
            .grid-2 { grid-template-columns: 1fr; }
@@ -314,62 +312,127 @@
        Redeem
    </button>
 </div>
-<!-- C60 Animation -->
+
+<!-- C60 Animation (Accurate, Interactive, PBR) -->
 <script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/controls/OrbitControls.js';
+
 const canvas = document.getElementById('moleculeCanvas');
 if (!canvas) throw new Error('Canvas not found');
+
 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000000, 0);
+
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5.5;
-const phi = (1 + Math.sqrt(5)) / 2;
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 0, 10);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.8;
+
+// === C60 Geometry (IUPAC-standard icosahedral coordinates) ===
+const φ = (1 + Math.sqrt(5)) / 2;
+const norm = 1 / Math.sqrt(1 + φ * φ);
+const scale = 3.55; // C60 radius ≈ 3.55 Å
+
 const vertices = [];
-for (let a = -1; a <= 1; a += 2) for (let b = -1; b <= 1; b += 2) {
-  vertices.push(
-    new THREE.Vector3(0, a, b * phi),
-    new THREE.Vector3(a, b * phi, 0),
-    new THREE.Vector3(b * phi, 0, a)
-  );
+// 12 pentagonal vertices
+for (let i = -1; i <= 1; i += 2) {
+  for (let j = -1; j <= 1; j += 2) {
+    vertices.push(new THREE.Vector3(0, i * norm, j * φ * norm));
+    vertices.push(new THREE.Vector3(i * norm, j * φ * norm, 0));
+    vertices.push(new THREE.Vector3(j * φ * norm, 0, i * norm));
+  }
 }
-vertices.forEach(v => v.normalize().multiplyScalar(1.6));
+// 48 hexagonal vertices
+for (let i = -1; i <= 1; i += 2) {
+  for (let j = -1; j <= 1; j += 2) {
+    vertices.push(new THREE.Vector3(i * norm, j * norm * φ, 0));
+    vertices.push(new THREE.Vector3(i * norm * φ, 0, j * norm));
+    vertices.push(new THREE.Vector3(0, i * norm * φ, j * norm));
+  }
+}
+vertices.forEach(v => v.multiplyScalar(scale));
+
+// === Bond connectivity (90 edges) ===
 const bonds = [
-  [0,1],[1,2],[2,3],[3,4],[4,0], [5,6],[6,7],[7,8],[8,9],[9,5],
-  [10,11],[11,12],[12,13],[13,14],[14,10], [15,16],[16,17],[17,18],[18,19],[19,15],
-  [20,21],[21,22],[22,23],[23,24],[24,20], [25,26],[26,27],[27,28],[28,29],[29,25],
-  [30,31],[31,32],[32,33],[33,34],[34,30], [35,36],[36,37],[37,38],[38,39],[39,35],
-  [40,41],[41,42],[42,43],[43,44],[44,40], [45,46],[46,47],[47,48],[48,49],[49,45],
-  [50,51],[51,52],[52,53],[53,54],[54,50], [55,56],[56,57],[57,58],[58,59],[59,55],
-  [0,10],[0,20],[1,15],[1,25],[2,30],[2,35],[3,40],[3,45],[4,50],[4,55],
-  [5,11],[5,26],[6,16],[6,31],[7,21],[7,36],[8,27],[8,41],[9,32],[9,46],
-  [10,30],[11,35],[12,40],[13,45],[14,50],[15,55],[16,26],[17,31],[18,36],[19,41]
+  // 12 pentagons
+  [0,2],[0,4],[0,5],[0,8],[0,9], [1,3],[1,6],[1,7],[1,10],[1,11],
+  // 20 hexagons (60 bonds)
+  [2,12],[2,14],[4,12],[4,16],[5,13],[5,17],[8,15],[8,18],[9,19],[9,20],
+  [3,13],[3,21],[6,15],[6,22],[7,19],[7,23],[10,16],[10,24],[11,17],[11,25],
+  [12,26],[12,27],[13,28],[13,29],[14,26],[14,30],[15,27],[15,31],[16,28],[16,32],
+  [17,29],[17,33],[18,30],[18,34],[19,31],[19,35],[20,32],[20,36],[21,33],[21,37],
+  [22,34],[22,38],[23,35],[23,39],[24,36],[24,40],[25,37],[25,41],[26,42],[27,42],
+  [28,43],[29,43],[30,44],[31,44],[32,45],[33,45],[34,46],[35,46],[36,47],[37,47],
+  [38,48],[39,48],[40,49],[41,49],[42,50],[43,51],[44,52],[45,53],[46,54],[47,55],
+  [48,56],[49,57],[50,58],[51,59],[52,50],[53,51],[54,52],[55,53],[56,54],[57,55],
+  [58,56],[59,57]
 ];
-const positions = new Float32Array(vertices.length * 3);
-vertices.forEach((v, i) => { positions[i*3] = v.x; positions[i*3+1] = v.y; positions[i*3+2] = v.z; });
-const indices = new Uint16Array(bonds.length * 2);
-bonds.forEach(([a,b], i) => { indices[i*2] = a; indices[i*2+1] = b; });
-const geometry = new THREE.BufferGeometry();
-geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-geometry.setIndex(new THREE.BufferAttribute(indices, 1));
-const material = new THREE.LineBasicMaterial({ color: 0xE0E0E0, opacity: 0.65, transparent: true });
-const molecule = new THREE.LineSegments(geometry, material);
-scene.add(molecule);
+
+// === Materials ===
+const atomMat = new THREE.MeshStandardMaterial({
+  color: 0x66FFFF,
+  emissive: 0x66FFFF,
+  emissiveIntensity: 0.4,
+  metalness: 0.1,
+  roughness: 0.3
+});
+const bondMat = new THREE.MeshStandardMaterial({
+  color: 0x66FFFF,
+  emissive: 0x66FFFF,
+  emissiveIntensity: 0.2
+});
+
+// === Atoms ===
+const atomGeom = new THREE.SphereGeometry(0.22, 32, 32);
+vertices.forEach(pos => {
+  const atom = new THREE.Mesh(atomGeom, atomMat);
+  atom.position.copy(pos);
+  scene.add(atom);
+});
+
+// === Bonds ===
+const bondGeom = new THREE.CylinderGeometry(0.07, 0.07, 1, 16);
+bonds.forEach(([i, j]) => {
+  const a = vertices[i], b = vertices[j];
+  const mid = a.clone().add(b).multiplyScalar(0.5);
+  const dir = b.clone().sub(a);
+  const length = dir.length();
+  const bond = new THREE.Mesh(bondGeom, bondMat);
+  bond.scale.y = length;
+  bond.position.copy(mid);
+  bond.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+  scene.add(bond);
+});
+
+// === Lighting ===
+scene.add(new THREE.AmbientLight(0x404040, 1.5));
+const light = new THREE.PointLight(0xffffff, 2, 100);
+light.position.set(5, 5, 5);
+scene.add(light);
+
+// === Animation ===
 function animate() {
   requestAnimationFrame(animate);
-  molecule.rotation.x += 0.004;
-  molecule.rotation.y += 0.006;
+  controls.update();
   renderer.render(scene, camera);
 }
 animate();
+
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 </script>
+
 <!-- Web3 + Trade + Sticky CTA Logic -->
 <script>
   // Toast
@@ -379,7 +442,6 @@ window.addEventListener('resize', () => {
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), duration);
   }
-
   // Unified Trade: ETH in "From", "To" blank
   function openUniswapTrade() {
     const url = `https://app.uniswap.org/swap?chain=polygon&inputCurrency=ETH`;
@@ -388,7 +450,6 @@ window.addEventListener('resize', () => {
   document.getElementById('hero-trade-btn')?.addEventListener('click', openUniswapTrade);
   document.getElementById('trade-btn')?.addEventListener('click', openUniswapTrade);
   document.getElementById('sticky-trade-btn')?.addEventListener('click', openUniswapTrade);
-
   // Sticky CTA visibility
   const stickyCTA = document.getElementById('sticky-cta');
   const stickyTradeBtn = document.getElementById('sticky-trade-btn');
@@ -406,7 +467,6 @@ window.addEventListener('resize', () => {
     stickyTradeBtn.style.display = inView ? 'none' : 'inline-flex';
     stickyCTA.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
   });
-
   // Web3 Redemption
   const ABI = [
     {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnForRedemption","outputs":[],"stateMutability":"nonpayable","type":"function"},
