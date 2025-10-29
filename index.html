@@ -11,7 +11,7 @@
    <meta property="og:url" content="https://buckyvault.xyz">
    <meta property="og:type" content="website">
    <meta name="twitter:card" content="summary_large_image">
-   <meta name="twitter:title" content="BuckyVault | Fullerene-Backed ERC-20">
+   <meta name="twitter:title" content="BuckyVault | Fullerene-Backed ERC-0">
    <meta name="twitter:description" content="Audited C₆₀ custody on Polygon.">
    <meta name="twitter:image" content="https://buckyvault.xyz/og.png">
    <title>BuckyVault | Fullerene-Backed ERC-20 — Audited Molecular Custody</title>
@@ -312,10 +312,10 @@
        Redeem
    </button>
 </div>
-<!-- C60 OBJ Animation (Raw GitHub URL + Fallback) -->
+<!-- C60 GLB Animation (Wireframe via GLTFLoader) -->
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js';
-import { OBJLoader } from 'https://cdn.jsdelivr.net/npm/three@0.152.0/examples/jsm/loaders/OBJLoader.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.152.0/examples/jsm/loaders/GLTFLoader.js';
 
 const canvas = document.getElementById('moleculeCanvas');
 if (!canvas) throw new Error('Canvas not found');
@@ -331,26 +331,15 @@ camera.position.z = 5.5;
 
 let molecule;
 
-// Load C60.obj from GitHub raw (replace [username] with your GitHub username)
-const loader = new OBJLoader();
+// Load c60.glb (same directory)
+const loader = new GLTFLoader();
 loader.load(
-  'https://raw.githubusercontent.com/[username]/buckyvault/main/c60.obj',  // REPLACE [username]
-  (obj) => {
-    molecule = obj;
+  'c60.glb',  // Relative path
+  (gltf) => {
+    molecule = gltf.scene;
     scene.add(molecule);
 
-    // Normalize scale to ~3.2 units (matches original)
-    const box = new THREE.Box3().setFromObject(molecule);
-    const size = box.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = 3.2 / maxDim;
-    molecule.scale.setScalar(scale);
-
-    // Center at origin
-    box.setFromObject(molecule);
-    box.getCenter(molecule.position).multiplyScalar(-1);
-
-    // Wireframe conversion: Edges only, original style
+    // Convert all meshes to wireframe LineSegments
     molecule.traverse((child) => {
       if (child.isMesh) {
         const edges = new THREE.EdgesGeometry(child.geometry, 30);  // 30° threshold for bonds
@@ -365,16 +354,28 @@ loader.load(
         molecule.add(line);
       }
     });
-    console.log('C60 OBJ loaded successfully');
+
+    // Normalize scale
+    const box = new THREE.Box3().setFromObject(molecule);
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 3.2 / maxDim;
+    molecule.scale.setScalar(scale);
+
+    // Center
+    box.setFromObject(molecule);
+    box.getCenter(molecule.position).multiplyScalar(-1);
+
+    console.log('C60 GLB wireframe loaded');
   },
   (xhr) => console.log(`${(xhr.loaded / xhr.total * 100).toFixed(0)}% loaded`),
   (err) => {
-    console.error('OBJ load error:', err);
-    loadProceduralC60();
+    console.error('GLB load error:', err);
+    loadProceduralC60();  // Fallback
   }
 );
 
-// Fallback procedural C60 (exact original)
+// Fallback procedural C60
 function loadProceduralC60() {
   const phi = (1 + Math.sqrt(5)) / 2;
   const vertices = [];
@@ -386,6 +387,7 @@ function loadProceduralC60() {
     );
   }
   vertices.forEach(v => v.normalize().multiplyScalar(1.6));
+
   const bonds = [
     [0,1],[1,2],[2,3],[3,4],[4,0], [5,6],[6,7],[7,8],[8,9],[9,5],
     [10,11],[11,12],[12,13],[13,14],[14,10], [15,16],[16,17],[17,18],[18,19],[19,15],
@@ -397,15 +399,23 @@ function loadProceduralC60() {
     [5,11],[5,26],[6,16],[6,31],[7,21],[7,36],[8,27],[8,41],[9,32],[9,46],
     [10,30],[11,35],[12,40],[13,45],[14,50],[15,55],[16,26],[17,31],[18,36],[19,41]
   ];
+
   const positions = new Float32Array(vertices.length * 3);
-  vertices.forEach((v, i) => { positions[i*3] = v.x; positions[i*3+1] = v.y; positions[i*3+2] = v.z; });
+  vertices.forEach((v, i) => {
+    positions[i*3] = v.x; positions[i*3+1] = v.y; positions[i*3+2] = v.z;
+  });
+
   const indices = new Uint16Array(bonds.length * 2);
-  bonds.forEach(([a,b], i) => { indices[i*2] = a; indices[i*2+1] = b; });
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+  bonds.forEach(([a,b], i) => {
+    indices[i*2] = a; indices[i*2+1] = b;
+  });
+
+  const geom = new THREE.BufferGeometry();
+  geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geom.setIndex(new THREE.BufferAttribute(indices, 1));
+
   molecule = new THREE.LineSegments(
-    geometry,
+    geom,
     new THREE.LineBasicMaterial({ color: 0xE0E0E0, opacity: 0.65, transparent: true })
   );
   scene.add(molecule);
