@@ -155,6 +155,22 @@
            .chart-title { top: 14px; font-size: 1.24rem; }
        }
        :focus-visible { outline: 2px solid var(--metal); outline-offset: 2.2px; }
+      .logo-img {
+  max-width: 420px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto 0.45rem;
+  filter: drop-shadow(0 0 20px rgba(240,216,120,0.52))
+          drop-shadow(0 0 44px rgba(240,216,120,0.30));
+  transition: transform 0.4s ease;
+}
+
+.logo-img:hover {
+  transform: scale(1.04);
+  filter: drop-shadow(0 0 30px rgba(240,216,120,0.65))
+          drop-shadow(0 0 60px rgba(240,216,120,0.45));
+}
    </style>
 </head>
 <body>
@@ -162,7 +178,7 @@
 <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
 <section id="hero">
    <div class="container">
-       <h1 class="hero-title">BuckyVault</h1>
+       <img src="/buckyvault-logo.png" alt="BuckyVault Logo" class="logo-img">
        <p class="hero-subtitle">
            <span style="color: var(--metal); font-weight: 600; font-family: 'Cinzel', serif;">FUL60</span>
            embodies the fusion of molecular precision and blockchain sovereignty—each token secured by ≥99.9% pure C₆₀ fullerene in nitrogen-sealed custody, engineered for elite asset preservation.
@@ -465,3 +481,4 @@ window.addEventListener('resize', () => {
 </script>
 </body>
 </html>
+
