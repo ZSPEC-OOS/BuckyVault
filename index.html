@@ -101,7 +101,6 @@
            transition: transform 0.4s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
        }
        .sticky-cta.show { transform: translateY(0); }
-
        /* REVISED CHART STYLES */
        .chart-container {
            position: relative;
@@ -135,7 +134,6 @@
            top: 80px;
            left: 0;
        }
-
        @media (max-width: 768px) {
            .hero-title { font-size: 3rem; }
            .grid-2 { grid-template-columns: 1fr; }
@@ -266,7 +264,6 @@
    <div class="container">
        <div class="card">
            <h2 class="section-title">Blockchain Integration</h2>
-           <!-- Ethereum Chart Only — Graph Pushed Down -->
            <div class="chart-container">
                <h3 class="chart-title">Live ETH Price & Liquidity (Ethereum)</h3>
                <iframe class="chart-iframe"
@@ -314,73 +311,177 @@
        Redeem
    </button>
 </div>
-<!-- C60 Animation -->
+
+<!-- ROBUST C60 ANIMATION: Preloaded Scripts + Fallback + Debug Overlay -->
 <script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js';
-const canvas = document.getElementById('moleculeCanvas');
-if (!canvas) throw new Error('Canvas not found');
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x000000, 0);
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5.5;
-const phi = (1 + Math.sqrt(5)) / 2;
-const vertices = [];
-for (let a = -1; a <= 1; a += 2) for (let b = -1; b <= 1; b += 2) {
-  vertices.push(
-    new THREE.Vector3(0, a, b * phi),
-    new THREE.Vector3(a, b * phi, 0),
-    new THREE.Vector3(b * phi, 0, a)
-  );
-}
-vertices.forEach(v => v.normalize().multiplyScalar(1.6));
-const bonds = [
-  [0,1],[1,2],[2,3],[3,4],[4,0], [5,6],[6,7],[7,8],[8,9],[9,5],
-  [10,11],[11,12],[12,13],[13,14],[14,10], [15,16],[16,17],[17,18],[18,19],[19,15],
-  [20,21],[21,22],[22,23],[23,24],[24,20], [25,26],[26,27],[27,28],[28,29],[29,25],
-  [30,31],[31,32],[32,33],[33,34],[34,30], [35,36],[36,37],[37,38],[38,39],[39,35],
-  [40,41],[41,42],[42,43],[43,44],[44,40], [45,46],[46,47],[47,48],[48,49],[49,45],
-  [50,51],[51,52],[52,53],[53,54],[54,50], [55,56],[56,57],[57,58],[58,59],[59,55],
-  [0,10],[0,20],[1,15],[1,25],[2,30],[2,35],[3,40],[3,45],[4,50],[4,55],
-  [5,11],[5,26],[6,16],[6,31],[7,21],[7,36],[8,27],[8,41],[9,32],[9,46],
-  [10,30],[11,35],[12,40],[13,45],[14,50],[15,55],[16,26],[17,31],[18,36],[19,41]
-];
-const positions = new Float32Array(vertices.length * 3);
-vertices.forEach((v, i) => { positions[i*3] = v.x; positions[i*3+1] = v.y; positions[i*3+2] = v.z; });
-const indices = new Uint16Array(bonds.length * 2);
-bonds.forEach(([a,b], i) => { indices[i*2] = a; indices[i*2+1] = b; });
-const geometry = new THREE.BufferGeometry();
-geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-geometry.setIndex(new THREE.BufferAttribute(indices, 1));
-const material = new THREE.LineBasicMaterial({ color: 0xE0E0E0, opacity: 0.65, transparent: true });
-const molecule = new THREE.LineSegments(geometry, material);
-scene.add(molecule);
-function animate() {
-  requestAnimationFrame(animate);
-  molecule.rotation.x += 0.004;
-  molecule.rotation.y += 0.006;
-  renderer.render(scene, camera);
-}
-animate();
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
+  // Debug overlay
+  const debug = document.createElement('div');
+  debug.style.position = 'fixed'; debug.style.top = '10px'; debug.style.right = '10px';
+  debug.style.background = 'rgba(0,0,0,0.7)'; debug.style.color = '#66FFFF'; debug.style.padding = '8px 12px';
+  debug.style.font = '12px monospace'; debug.style.zIndex = '10000'; debug.style.borderRadius = '4px';
+  debug.style.pointerEvents = 'none'; debug.style.opacity = '0.8';
+  document.body.appendChild(debug);
+  function log(msg) { debug.textContent = msg; console.log('[C60]', msg); }
+
+  const canvas = document.getElementById('moleculeCanvas');
+  if (!canvas) { log('Canvas not found'); throw new Error('Canvas missing'); }
+
+  // Preload Three.js core + modules
+  const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js';
+  const ORBIT_URL = 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/controls/OrbitControls.js';
+  const COMPOSER_URL = 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/postprocessing/EffectComposer.js';
+  const RENDER_URL = 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/postprocessing/RenderPass.js';
+  const BLOOM_URL = 'https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/postprocessing/UnrealBloomPass.js';
+
+  log('Loading Three.js...');
+  import(THREE_URL).then(THREE => {
+    log('Three.js loaded');
+    Promise.all([
+      import(ORBIT_URL),
+      import(COMPOSER_URL),
+      import(RENDER_URL),
+      import(BLOOM_URL)
+    ]).then(([{ OrbitControls }, { EffectComposer }, { RenderPass }, { UnrealBloomPass }]) => {
+      log('All modules loaded');
+      init(THREE, OrbitControls, EffectComposer, RenderPass, UnrealBloomPass);
+    }).catch(err => {
+      log('Module load failed: ' + err.message);
+      fallback();
+    });
+  }).catch(err => {
+    log('Three.js load failed: ' + err.message);
+    fallback();
+  });
+
+  function fallback() {
+    canvas.style.opacity = '1';
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#66FFFF';
+    ctx.font = '20px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText('Animation unavailable', canvas.width/2, canvas.height/2);
+  }
+
+  function init(THREE, OrbitControls, EffectComposer, RenderPass, UnrealBloomPass) {
+    log('Initializing renderer');
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.8;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.05, 20);
+    camera.position.set(0, 0, 6);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; controls.dampingFactor = 0.08;
+    controls.autoRotate = true; controls.autoRotateSpeed = 0.6;
+    controls.enableZoom = false; controls.enablePan = false;
+
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    const bloom = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.2, 0.6, 0.15);
+    composer.addPass(bloom);
+
+    // C60 vertices
+    const radius = 1.8, phi = (1 + Math.sqrt(5)) / 2;
+    const vertices = [];
+    for (let a = -1; a <= 1; a += 2) for (let b = -1; b <= 1; b += 2) {
+      vertices.push(
+        new THREE.Vector3(0, a, b * phi),
+        new THREE.Vector3(a, b * phi, 0),
+        new THREE.Vector3(b * phi, 0, a)
+      );
+    }
+    vertices.forEach(v => v.normalize().multiplyScalar(radius));
+
+    // Bonds
+    const bonds = [
+      [0,1],[1,2],[2,3],[3,4],[4,0],[5,6],[6,7],[7,8],[8,9],[9,5],
+      [10,11],[11,12],[12,13],[13,14],[14,10],[15,16],[16,17],[17,18],[18,19],[19,15],
+      [20,21],[21,22],[22,23],[23,24],[24,20],[25,26],[26,27],[27,28],[28,29],[29,25],
+      [30,31],[31,32],[32,33],[33,34],[34,30],[35,36],[36,37],[37,38],[38,39],[39,35],
+      [40,41],[41,42],[42,43],[43,44],[44,40],[45,46],[46,47],[47,48],[48,49],[49,45],
+      [50,51],[51,52],[52,53],[53,54],[54,50],[55,56],[56,57],[57,58],[58,59],[59,55],
+      [0,10],[0,20],[1,15],[1,25],[2,30],[2,35],[3,40],[3,45],[4,50],[4,55],
+      [5,11],[5,26],[6,16],[6,31],[7,21],[7,36],[8,27],[8,41],[9,32],[9,46],
+      [10,30],[11,35],[12,40],[13,45],[14,50],[15,55],[16,26],[17,31],[18,36],[19,41]
+    ];
+
+    // Atoms
+    const atomGeo = new THREE.SphereGeometry(0.12, 32, 24);
+    const atomMat = new THREE.MeshStandardMaterial({ color: 0x66FFFF, emissive: 0x66FFFF, emissiveIntensity: 0.6, roughness: 0.15, metalness: 0.9 });
+    const atoms = new THREE.InstancedMesh(atomGeo, atomMat, vertices.length);
+    vertices.forEach((v, i) => atoms.setMatrixAt(i, new THREE.Matrix4().setPosition(v)));
+    scene.add(atoms);
+
+    // Bonds
+    const bondGeo = new THREE.CylinderGeometry(0.04, 0.04, 1, 16, 1, false);
+    bondGeo.translate(0, 0.5, 0);
+    const bondMat = new THREE.MeshStandardMaterial({ color: 0xE0E0E0, emissive: 0xE0E0E0, emissiveIntensity: 0.3, roughness: 0.4, metalness: 0.7 });
+    const bondsInst = new THREE.InstancedMesh(bondGeo, bondMat, bonds.length);
+    bonds.forEach(([a, b], i) => {
+      const posA = vertices[a], posB = vertices[b];
+      const mid = posA.clone().add(posB).multiplyScalar(0.5);
+      const length = posA.distanceTo(posB);
+      const dir = posB.clone().sub(posA).normalize();
+      const quat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0), dir);
+      const matrix = new THREE.Matrix4().compose(mid, quat, new THREE.Vector3(1, length, 1));
+      bondsInst.setMatrixAt(i, matrix);
+    });
+    scene.add(bondsInst);
+
+    // Lights
+    scene.add(new THREE.AmbientLight(0x404040, 0.6));
+    const p1 = new THREE.PointLight(0x66FFFF, 3, 15); p1.position.set(3, 2, 4); scene.add(p1);
+    const p2 = new THREE.PointLight(0xFFFFFF, 2, 12); p2.position.set(-4, -3, 3); scene.add(p2);
+
+    // Particles
+    const pGeo = new THREE.BufferGeometry();
+    const count = 800, pos = new Float32Array(count * 3);
+    for (let i = 0; i < count * 3; i += 3) {
+      const r = 8 + Math.random() * 6, theta = Math.random() * Math.PI * 2, phi = Math.acos(Math.random() * 2 - 1);
+      pos[i] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i+1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i+2] = r * Math.cos(phi);
+    }
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ color: 0x66FFFF, size: 0.04, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending }));
+    scene.add(particles);
+
+    // Animation
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+      controls.update();
+      particles.rotation.y = t * 0.05;
+      p1.position.applyAxisAngle(new THREE.Vector3(0,1,0), 0.008);
+      p2.position.applyAxisAngle(new THREE.Vector3(0,1,0), -0.006);
+      composer.render();
+    }
+    animate();
+    log('Animation running');
+
+    // Resize
+    window.addEventListener('resize', () => {
+      const w = window.innerWidth, h = window.innerHeight;
+      camera.aspect = w / h; camera.updateProjectionMatrix();
+      renderer.setSize(w, h); composer.setSize(w, h);
+    });
+  }
 </script>
+
 <!-- Web3 + Trade + Sticky CTA Logic -->
 <script>
-  // Toast
   const toast = document.getElementById('toast');
   function showToast(msg, duration = 3000) {
     toast.textContent = msg;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), duration);
   }
-
-  // Unified Trade: ETH in "From", "To" blank
   function openUniswapTrade() {
     const url = `https://app.uniswap.org/swap?chain=polygon&inputCurrency=ETH`;
     window.open(url, '_blank');
@@ -389,15 +490,12 @@ window.addEventListener('resize', () => {
   document.getElementById('trade-btn')?.addEventListener('click', openUniswapTrade);
   document.getElementById('sticky-trade-btn')?.addEventListener('click', openUniswapTrade);
 
-  // Sticky CTA visibility
   const stickyCTA = document.getElementById('sticky-cta');
   const stickyTradeBtn = document.getElementById('sticky-trade-btn');
   const stickyRedeem = document.getElementById('sticky-redeem');
   const blockchainSection = document.getElementById('blockchain');
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      stickyTradeBtn.style.display = entry.isIntersecting ? 'none' : 'inline-flex';
-    });
+    entries.forEach(entry => stickyTradeBtn.style.display = entry.isIntersecting ? 'none' : 'inline-flex');
   }, { threshold: 0.3 });
   observer.observe(blockchainSection);
   window.addEventListener('scroll', () => {
@@ -407,7 +505,6 @@ window.addEventListener('resize', () => {
     stickyCTA.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
   });
 
-  // Web3 Redemption
   const ABI = [
     {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnForRedemption","outputs":[],"stateMutability":"nonpayable","type":"function"},
     {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
@@ -415,15 +512,14 @@ window.addEventListener('resize', () => {
     {"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"}
   ];
   let web3, account, contract;
-  const FUL60_CONTRACT = 'YOUR_FUL60_CONTRACT_ADDRESS'; // REPLACE POST-DEPLOYMENT
+  const FUL60_CONTRACT = 'YOUR_FUL60_CONTRACT_ADDRESS';
   const statusEl = document.getElementById('web3-status');
   const connectBtn = document.getElementById('connect-wallet');
   const redeemBtn = document.getElementById('redeem-btn');
   connectBtn.addEventListener('click', async () => {
     if (!window.ethereum) return showToast('MetaMask required');
     try {
-      connectBtn.disabled = true;
-      connectBtn.textContent = 'Connecting...';
+      connectBtn.disabled = true; connectBtn.textContent = 'Connecting...';
       web3 = new Web3(window.ethereum);
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       [account] = await web3.eth.getAccounts();
@@ -437,35 +533,22 @@ window.addEventListener('resize', () => {
       statusEl.innerHTML = `Connected: <span style="color:var(--accent);">${account.slice(0,6)}...${account.slice(-4)}</span><br>
                             Balance: <strong>${bal.toFixed(4)} FUL60</strong><br>
                             Circulating: <strong>${(supply / (10 ** decimals)).toFixed(0)} FUL60</strong>`;
-      if (bal >= 1000) {
-        redeemBtn.style.display = 'inline-flex';
-        stickyRedeem.style.display = 'inline-flex';
-      }
+      if (bal >= 1000) { redeemBtn.style.display = 'inline-flex'; stickyRedeem.style.display = 'inline-flex'; }
       showToast('Wallet connected');
-    } catch (err) {
-      showToast('Connection failed: ' + err.message);
-    } finally {
-      connectBtn.disabled = false;
-      connectBtn.textContent = 'Connect Wallet';
-    }
+    } catch (err) { showToast('Connection failed: ' + err.message); }
+    finally { connectBtn.disabled = false; connectBtn.textContent = 'Connect Wallet'; }
   });
   redeemBtn.addEventListener('click', async () => {
     if (!contract) return showToast('Connect wallet first');
     const amount = prompt('Tokens to redeem (min 1000):');
     if (!amount || amount < 1000) return showToast('Minimum 1000 FUL60');
     try {
-      redeemBtn.disabled = true;
-      redeemBtn.textContent = 'Submitting...';
+      redeemBtn.disabled = true; redeemBtn.textContent = 'Submitting...';
       await contract.methods.burnForRedemption(web3.utils.toBN(amount * 1e18)).send({ from: account });
       showToast('Redemption submitted. Contact support for shipment.');
-    } catch (err) {
-      showToast('Failed: ' + err.message);
-    } finally {
-      redeemBtn.disabled = false;
-      redeemBtn.textContent = 'Redeem Tokens';
-    }
+    } catch (err) { showToast('Failed: ' + err.message); }
+    finally { redeemBtn.disabled = false; redeemBtn.textContent = 'Redeem Tokens'; }
   });
 </script>
 </body>
 </html>
-
