@@ -312,7 +312,7 @@
        Redeem
    </button>
 </div>
-<!-- C60 OBJ Animation -->
+<!-- C60 OBJ Animation (Raw GitHub URL + Fallback) -->
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js';
 import { OBJLoader } from 'https://cdn.jsdelivr.net/npm/three@0.152.0/examples/jsm/loaders/OBJLoader.js';
@@ -331,29 +331,29 @@ camera.position.z = 5.5;
 
 let molecule;
 
-// Load C60.obj (same directory as index.html)
+// Load C60.obj from GitHub raw (replace [username] with your GitHub username)
 const loader = new OBJLoader();
 loader.load(
-  'c60.obj',  // Relative path
+  'https://raw.githubusercontent.com/[username]/buckyvault/main/c60.obj',  // REPLACE [username]
   (obj) => {
     molecule = obj;
     scene.add(molecule);
 
-    // Normalize scale
+    // Normalize scale to ~3.2 units (matches original)
     const box = new THREE.Box3().setFromObject(molecule);
     const size = box.getSize(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = 3.2 / maxDim;  // Match original wireframe bounding sphere
+    const scale = 3.2 / maxDim;
     molecule.scale.setScalar(scale);
 
-    // Center geometry
+    // Center at origin
     box.setFromObject(molecule);
     box.getCenter(molecule.position).multiplyScalar(-1);
 
-    // Convert all meshes to LineSegments (wireframe) with exact original style
+    // Wireframe conversion: Edges only, original style
     molecule.traverse((child) => {
       if (child.isMesh) {
-        const edges = new THREE.EdgesGeometry(child.geometry, 30);  // Threshold angle for sharp edges
+        const edges = new THREE.EdgesGeometry(child.geometry, 30);  // 30° threshold for bonds
         const line = new THREE.LineSegments(
           edges,
           new THREE.LineBasicMaterial({ color: 0xE0E0E0, opacity: 0.65, transparent: true })
@@ -365,10 +365,52 @@ loader.load(
         molecule.add(line);
       }
     });
+    console.log('C60 OBJ loaded successfully');
   },
-  (xhr) => console.log((xhr.loaded / xhr.total * 100) + '% loaded'),
-  (err) => console.error('OBJ load error:', err)
+  (xhr) => console.log(`${(xhr.loaded / xhr.total * 100).toFixed(0)}% loaded`),
+  (err) => {
+    console.error('OBJ load error:', err);
+    loadProceduralC60();
+  }
 );
+
+// Fallback procedural C60 (exact original)
+function loadProceduralC60() {
+  const phi = (1 + Math.sqrt(5)) / 2;
+  const vertices = [];
+  for (let a = -1; a <= 1; a += 2) for (let b = -1; b <= 1; b += 2) {
+    vertices.push(
+      new THREE.Vector3(0, a, b * phi),
+      new THREE.Vector3(a, b * phi, 0),
+      new THREE.Vector3(b * phi, 0, a)
+    );
+  }
+  vertices.forEach(v => v.normalize().multiplyScalar(1.6));
+  const bonds = [
+    [0,1],[1,2],[2,3],[3,4],[4,0], [5,6],[6,7],[7,8],[8,9],[9,5],
+    [10,11],[11,12],[12,13],[13,14],[14,10], [15,16],[16,17],[17,18],[18,19],[19,15],
+    [20,21],[21,22],[22,23],[23,24],[24,20], [25,26],[26,27],[27,28],[28,29],[29,25],
+    [30,31],[31,32],[32,33],[33,34],[34,30], [35,36],[36,37],[37,38],[38,39],[39,35],
+    [40,41],[41,42],[42,43],[43,44],[44,40], [45,46],[46,47],[47,48],[48,49],[49,45],
+    [50,51],[51,52],[52,53],[53,54],[54,50], [55,56],[56,57],[57,58],[58,59],[59,55],
+    [0,10],[0,20],[1,15],[1,25],[2,30],[2,35],[3,40],[3,45],[4,50],[4,55],
+    [5,11],[5,26],[6,16],[6,31],[7,21],[7,36],[8,27],[8,41],[9,32],[9,46],
+    [10,30],[11,35],[12,40],[13,45],[14,50],[15,55],[16,26],[17,31],[18,36],[19,41]
+  ];
+  const positions = new Float32Array(vertices.length * 3);
+  vertices.forEach((v, i) => { positions[i*3] = v.x; positions[i*3+1] = v.y; positions[i*3+2] = v.z; });
+  const indices = new Uint16Array(bonds.length * 2);
+  bonds.forEach(([a,b], i) => { indices[i*2] = a; indices[i*2+1] = b; });
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+  molecule = new THREE.LineSegments(
+    geometry,
+    new THREE.LineBasicMaterial({ color: 0xE0E0E0, opacity: 0.65, transparent: true })
+  );
+  scene.add(molecule);
+  console.log('Fallback procedural C60 loaded');
+}
 
 function animate() {
   requestAnimationFrame(animate);
