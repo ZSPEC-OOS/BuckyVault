@@ -67,7 +67,7 @@
            text-shadow: 0 0 20px rgba(102,255,255,0.4), 0 0 40px rgba(102,255,255,0.2);
        }
        .hero-subtitle { font-size: 1.4rem; max-width: 800px; margin: auto; color: var(--text-muted); }
-       #tubes-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.32; pointer-events: none; z-index: -1; }
+       #shader-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.32; pointer-events: none; z-index: -1; }
        .section-title {
            font-size: 2.5rem; margin-bottom: 1.5rem; text-align: center; position: relative; color: var(--metal);
            text-shadow: 0 0 12px rgba(102,255,255,0.3);
@@ -150,7 +150,7 @@
    </style>
 </head>
 <body>
-<canvas id="tubes-canvas" aria-hidden="true"></canvas>
+<canvas id="shader-canvas" aria-hidden="true"></canvas>
 <!-- Toast Notification -->
 <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
 <section id="hero">
@@ -179,13 +179,13 @@
            </p>
            <div class="schematic">
                <div class="schematic-item">Vault</div>
-               <div class="schematic-arrow">⟶</div>
+               <div class="schematic-arrow">→</div>
                <div class="schematic-item">Assay</div>
-               <div class="schematic-arrow">⟶</div>
+               <div class="schematic-arrow">→</div>
                <div class="schematic-item">Token</div>
-               <div class="schematic-arrow">⟶</div>
+               <div class="schematic-arrow">→</div>
                <div class="schematic-item">Uniswap</div>
-               <div class="schematic-arrow">⟶</div>
+               <div class="schematic-arrow">→</div>
                <div class="schematic-item">Redemption</div>
            </div>
        </div>
@@ -313,95 +313,92 @@
    </button>
 </div>
 
-<!-- Tubes Cursor Animation (fixed: canvas fixed-positioned, init on DOM load, robust resize/mouse, trail fade) -->
+<!-- WebGL2 Shader Background (adapted from provided fragment shader) -->
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('tubes-canvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
-    let tubes = [];
-    let mouse = { x: width / 2, y: height / 2 };
-    let animId;
+  const canvas = document.getElementById('shader-canvas');
+  const gl = canvas.getContext('webgl2');
+  if (!gl) {
+    console.error('WebGL2 not supported');
+  } else {
+    const vs = `#version 300 es
+    precision highp float;
+    in vec2 aPos;
+    void main() { gl_Position = vec4(aPos, 0, 1); }`;
+    const fs = document.querySelector('script[type="x-shader/x-fragment"]').textContent;
 
-    class Tube {
-      constructor() { this.reset(); }
-      reset() {
-        this.x = mouse.x;
-        this.y = mouse.y;
-        this.radius = Math.random() * 15 + 8;
-        this.speed = Math.random() * 0.8 + 0.4;
-        this.angle = Math.random() * Math.PI * 2;
-        this.life = 0;
-        this.maxLife = Math.random() * 80 + 70;
+    const compile = (type, source) => {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.error(gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+        return null;
       }
-      update() {
-        this.life++;
-        this.radius += this.speed;
-        this.x += Math.cos(this.angle) * this.speed * 1.5;
-        this.y += Math.sin(this.angle) * this.speed * 1.5;
-        if (this.life > this.maxLife || this.radius > 250 || this.x < -50 || this.x > width + 50 || this.y < -50 || this.y > height + 50) this.reset();
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        const opacity = 1 - this.life / this.maxLife;
-        ctx.strokeStyle = `rgba(102, 255, 255, ${opacity * 0.35})`;
-        ctx.lineWidth = 2.5;
-        ctx.stroke();
-      }
+      return shader;
+    };
+
+    const program = gl.createProgram();
+    gl.attachShader(program, compile(gl.VERTEX_SHADER, vs));
+    gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fs));
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error(gl.getProgramInfoLog(program));
+    } else {
+      gl.useProgram(program);
+      const posLoc = gl.getAttribLocation(program, 'aPos');
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(posLoc);
+      gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+      const timeLoc = gl.getUniformLocation(program, 'time');
+      const resLoc = gl.getUniformLocation(program, 'resolution');
+      const moveLoc = gl.getUniformLocation(program, 'move');
+
+      let start = performance.now() / 1000;
+      let mouse = [0, 0];
+      const resize = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.uniform2f(resLoc, canvas.width, canvas.height);
+      };
+      resize();
+      window.addEventListener('resize', resize);
+      window.addEventListener('mousemove', e => {
+        mouse = [e.clientX, e.clientY];
+      });
+
+      const render = () => {
+        const t = performance.now() / 1000 - start;
+        gl.uniform1f(timeLoc, t);
+        gl.uniform2f(moveLoc, mouse[0], mouse[1]);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        requestAnimationFrame(render);
+      };
+      render();
     }
-
-    for (let i = 0; i < 40; i++) tubes.push(new Tube());
-
-    function animate() {
-      ctx.fillStyle = 'rgba(15, 15, 20, 0.08)';
-      ctx.fillRect(0, 0, width, height);
-      tubes.forEach(t => { t.update(); t.draw(); });
-      animId = requestAnimationFrame(animate);
-    }
-    animate();
-
-    window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    });
-
-    window.addEventListener('mousemove', e => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-      if (Math.random() < 0.25) tubes.push(new Tube());
-    });
-
-    window.addEventListener('touchmove', e => {
-      const touch = e.touches[0];
-      mouse.x = touch.clientX;
-      mouse.y = touch.clientY;
-      if (Math.random() < 0.25) tubes.push(new Tube());
-    }, { passive: true });
-  });
+  }
 </script>
 
-<!-- Web3 + Trade + Sticky CTA Logic (unchanged) -->
+<!-- Web3 + Trade + Sticky CTA Logic -->
 <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
 <script>
-  // Toast
   const toast = document.getElementById('toast');
   function showToast(msg, duration = 3000) {
     toast.textContent = msg;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), duration);
   }
-  // Unified Trade: ETH in "From", "To" blank
   function openUniswapTrade() {
     const url = `https://app.uniswap.org/swap?chain=polygon&inputCurrency=ETH`;
     window.open(url, '_blank');
   }
-  document.getElementById('hero-trade-btn')?.addEventListener('click', openUniswapTrade);
+  document.getElementBy بای('hero-trade-btn')?.addEventListener('click', openUniswapTrade);
   document.getElementById('trade-btn')?.addEventListener('click', openUniswapTrade);
   document.getElementById('sticky-trade-btn')?.addEventListener('click', openUniswapTrade);
-  // Sticky CTA visibility
   const stickyCTA = document.getElementById('sticky-cta');
   const stickyTradeBtn = document.getElementById('sticky-trade-btn');
   const stickyRedeem = document.getElementById('sticky-redeem');
@@ -418,7 +415,6 @@
     stickyTradeBtn.style.display = inView ? 'none' : 'inline-flex';
     stickyCTA.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
   });
-  // Web3 Redemption
   const ABI = [
     {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnForRedemption","outputs":[],"stateMutability":"nonpayable","type":"function"},
     {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
@@ -426,7 +422,7 @@
     {"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"}
   ];
   let web3, account, contract;
-  const FUL60_CONTRACT = 'YOUR_FUL60_CONTRACT_ADDRESS'; // REPLACE POST-DEPLOYMENT
+  const FUL60_CONTRACT = 'YOUR_FUL60_CONTRACT_ADDRESS';
   const statusEl = document.getElementById('web3-status');
   const connectBtn = document.getElementById('connect-wallet');
   const redeemBtn = document.getElementById('redeem-btn');
