@@ -1,303 +1,467 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Trade or redeem C60-backed ERC-20 tokens (FUL60) backed by Brink’s nitrogen vaults and lab-verified assays. A molecular asset on Polygon.">
-  <meta property="og:title" content="BuckyVault | Fullerene-Backed ERC-20">
-  <meta property="og:description" content="Audited C₆₀ custody. ERC-20 tokens backed by physical fullerene in N₂-sealed vaults.">
-  <meta property="og:image" content="https://buckyvault.xyz/og.png">
-  <meta property="og:url" content="https://buckyvault.xyz">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="BuckyVault | Fullerene-Backed ERC-20">
-  <meta name="twitter:description" content="Audited C₆₀ custody on Polygon.">
-  <meta name="twitter:image" content="https://buckyvault.xyz/og.png">
-  <title>BuckyVault | Fullerene-Backed ERC-20 — Audited Molecular Custody</title>
-
-  <!-- Fonts: Luxurious Roman for display, Rajdhani for body -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Luxurious+Roman&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-  <!-- Favicons -->
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-  <!-- Preload Critical Font -->
-  <link rel="preload" href="https://fonts.gstatic.com/s/rajdhani/v15/LDIxapCLg6e2RxJ2l3ZV9A.woff2" as="font" type="font/woff2" crossorigin>
-
-  <style>
-    :root {
-      --bg: #141418;
-      --metal: linear-gradient(135deg, #d4d4d4, #f5f5f5);
-      --accent: #cfcfcf;
-      --accent-light: #f8f8f8;
-      --text: #ffffff;
-      --text-muted: #e0e0e0;
-      --highlight: #eaeaea;
-      --card-bg: linear-gradient(135deg, rgba(25,23,28,0.94), rgba(35,32,40,0.91));
-      --border: rgba(200,200,200,0.42);
-      --glow: 0 0 20px rgba(200,200,200,0.38);
-    }
-
-    body {
-      font-family: 'Rajdhani', sans-serif;
-      color: var(--text);
-      background: var(--bg);
-      line-height: 1.72;
-      overflow-x: hidden;
-      font-weight: 300;
-      font-size: 0.92rem;
-    }
-
-    h1, h2, h3, .section-title, .hero-title {
-      font-family: 'Luxurious Roman', serif;
-      letter-spacing: 1.5px;
-      font-weight: 400;
-      text-transform: uppercase;
-    }
-
-    .hero-title {
-      font-size: 4.6rem;
-      margin-bottom: 0.45rem;
-      background: var(--metal);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(200,200,200,0.52), 0 0 44px rgba(200,200,200,0.30);
-    }
-
-    .btn {
-      background: transparent;
-      border: 1.7px solid #d4d4d4;
-      color: #d4d4d4;
-      padding: 13px 34px;
-      margin: 8px;
-      border-radius: 9px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.36s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.90rem;
-      box-shadow: var(--glow);
-      position: relative;
-      overflow: hidden;
-      font-family: 'Luxurious Roman', serif;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-
-    .btn:hover {
-      background: #f5f5f5;
-      color: #000;
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(200,200,200,0.55);
-    }
-
-    .btn-primary {
-      background: #f5f5f5;
-      color: #000;
-    }
-
-    .btn-primary:hover {
-      background: #ffffff;
-    }
-
-    .section-title {
-      font-size: 2.4rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      position: relative;
-      background: var(--metal);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 12px rgba(200,200,200,0.40);
-    }
-
-    .section-title::after {
-      content: '';
-      width: 85px;
-      height: 2.3px;
-      background: #d4d4d4;
-      display: block;
-      margin: 17px auto;
-      border-radius: 2px;
-      filter: drop-shadow(0 0 6.5px rgba(200,200,200,0.70));
-    }
-  </style>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="description" content="Trade or redeem C60-backed ERC-20 tokens (FUL60) backed by Brink’s nitrogen vaults and lab-verified assays. A molecular asset on Polygon.">
+   <!-- SEO & Social -->
+   <meta property="og:title" content="BuckyVault | Fullerene-Backed ERC-20">
+   <meta property="og:description" content="Audited C₆₀ custody. ERC-20 tokens backed by physical fullerene in N₂-sealed vaults.">
+   <meta property="og:image" content="https://buckyvault.xyz/og.png">
+   <meta property="og:url" content="https://buckyvault.xyz">
+   <meta property="og:type" content="website">
+   <meta name="twitter:card" content="summary_large_image">
+   <meta name="twitter:title" content="BuckyVault | Fullerene-Backed ERC-20">
+   <meta name="twitter:description" content="Audited C₆₀ custody on Polygon.">
+   <meta name="twitter:image" content="https://buckyvault.xyz/og.png">
+   <title>BuckyVault | Fullerene-Backed ERC-20 — Audited Molecular Custody</title>
+   <!-- Fonts: Futuristic Luxury – Rajdhani (geometric sans, tech/crypto) + Cinzel (regal serif titles) -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+   <!-- Favicons -->
+   <link rel="icon" href="/favicon.ico" sizes="any">
+   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+   <!-- Preload Critical Font -->
+   <link rel="preload" href="https://fonts.gstatic.com/s/rajdhani/v15/LDIxapCLg6e2RxJ2l3ZV9A.woff2" as="font" type="font/woff2" crossorigin>
+   <style>
+       :root {
+           --bg: #141418;                     /* Luminous deep slate */
+           --metal: #F0D878;                  /* Radiant pale gold */
+           --accent: #E8C070;                 /* Warm champagne */
+           --accent-light: #FFF8E1;            /* Creamy ivory */
+           --text: #FFFFFF;                    /* Pure white */
+           --text-muted: #F0E6D2;              /* Soft cream */
+           --highlight: #FFD700;              /* Electric gold */
+           --card-bg: linear-gradient(135deg, rgba(25,23,28,0.94), rgba(35,32,40,0.91));
+           --border: rgba(240,216,120,0.42);
+           --glow: 0 0 20px rgba(240,216,120,0.38);
+       }
+       *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+       body {
+           font-family: 'Rajdhani', sans-serif; color: var(--text); background: var(--bg); line-height:1.72;
+           overflow-x: hidden; font-weight: 300; font-size: 0.92rem;
+       }
+       h1, h2, h3, .section-title, .hero-title { 
+           font-family: 'Cinzel', serif; letter-spacing: 2.0px; font-weight: 900; 
+           text-transform: uppercase; 
+       }
+       section { padding: 105px 16px; position: relative; }
+       .container { max-width: 1160px; margin: auto; }
+       .card {
+           background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 38px;
+           backdrop-filter: blur(22px); box-shadow: var(--glow), 0 15px 48px rgba(0,0,0,0.65);
+           position: relative; overflow: hidden;
+       }
+       .card::before {
+           content: ''; position: absolute; inset: 0; pointer-events: none;
+           background: linear-gradient(135deg, transparent 0%, rgba(240,216,120,0.09) 100%);
+       }
+       .btn {
+           background: transparent; border: 1.7px solid var(--metal); color: var(--metal); padding: 13px 34px; margin: 8px;
+           border-radius: 9px; font-weight: 500; cursor: pointer; transition: all 0.36s ease; display: inline-flex;
+           align-items: center; gap: 8px; font-size: 0.90rem; box-shadow: var(--glow); position: relative; overflow: hidden;
+           font-family: 'Cinzel', serif; letter-spacing: 1.5px; text-transform: uppercase;
+       }
+       .btn::before { content: ''; position: absolute; inset: 0; background: var(--metal); opacity: 0; transition: opacity 0.36s; }
+       .btn:hover::before { opacity: 0.20; }
+       .btn:hover { background: var(--metal); color: #000; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(240,216,120,0.55); }
+       .btn-primary { background: var(--metal); color: #000; }
+       .btn-primary:hover { background: var(--accent-light); }
+       .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+       table { width: 100%; border-collapse: separate; border-spacing: 0 9px; margin: 26px 0; }
+       th, td { padding: 15px 17px; text-align: left; background: rgba(240,216,120,0.10); }
+       th { font-weight: 700; color: var(--metal); font-family: 'Cinzel', serif; letter-spacing: 1.3px; font-size: 0.94rem; }
+       td { background: transparent; border-bottom: 1px solid var(--border); font-size: 0.92rem; }
+       footer { text-align: center; padding: 65px 16px; font-size: 0.86rem; color: var(--text-muted); border-top: 1px solid var(--border); font-style: italic; }
+       #hero { min-height: 100vh; display: flex; align-items: center; text-align: center; position: relative; overflow: hidden; }
+       #hero::before { 
+           content: ''; position: absolute; inset: 0; 
+           background: radial-gradient(circle at center, rgba(240,216,120,0.18) 0%, transparent 66%); 
+           pointer-events: none; 
+       }
+       .hero-title {
+           font-size: 4.6rem; margin-bottom: 0.45rem; color: var(--metal);
+           text-shadow: 0 0 20px rgba(240,216,120,0.52), 0 0 44px rgba(240,216,120,0.30);
+           letter-spacing: 4.5px;
+       }
+       .hero-subtitle { 
+           font-size: 1.28rem; max-width: 860px; margin: auto; color: var(--text-muted); 
+           font-style: italic; letter-spacing: 0.65px; font-weight: 300;
+       }
+       .molecule-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.32; pointer-events: none; z-index: -1; }
+       .section-title {
+           font-size: 2.4rem; margin-bottom: 1.5rem; text-align: center; position: relative; color: var(--metal);
+           text-shadow: 0 0 12px rgba(240,216,120,0.40);
+       }
+       .section-title::after { 
+           content: ''; width: 85px; height: 2.3px; background: var(--metal); display: block; margin: 17px auto; 
+           border-radius: 2px; filter: drop-shadow(0 0 6.5px rgba(240,216,120,0.70)); 
+       }
+       .schematic { display: flex; justify-content: center; align-items: center; gap: 17px; margin: 50px 0; flex-wrap: nowrap; overflow-x: auto; padding: 17px 0; scrollbar-width: none; }
+       .schematic::-webkit-scrollbar { display: none; }
+       .schematic-item {
+           min-width: 125px; padding: 19px 25px; background: rgba(240,216,120,0.12); border: 1px dashed var(--border);
+           border-radius: 13px; text-align: center; font-weight: 600; font-size: 0.90rem; white-space: nowrap;
+           transition: all 0.36s ease; color: var(--metal); box-shadow: var(--glow); font-family: 'Cinzel', serif;
+           letter-spacing: 1.3px; text-transform: uppercase;
+       }
+       .schematic-item:hover { background: rgba(240,216,120,0.23); border-color: var(--metal); transform: translateY(-2px); }
+       .schematic-arrow { font-size: 1.85rem; color: var(--metal); font-weight: 300; animation: pulse 2.2s infinite; text-shadow: var(--glow); }
+       @keyframes pulse { 0%, 100% { opacity: 0.80; } 50% { opacity: 1; } }
+       .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 34px; align-items: center; }
+       .proof-item p { margin: 8px 0; font-family: monospace; color: var(--highlight); font-size: 0.96rem; }
+       .logo-grid { display: flex; justify-content: center; gap: 42px; margin: 34px 0; flex-wrap: wrap; }
+       .logo-grid img { height: 29px; filter: brightness(2.6) sepia(0.20) hue-rotate(26deg); opacity: 0.94; transition: 0.36s; loading: lazy; }
+       .logo-grid img:hover { opacity: 1; filter: brightness(3.2) sepia(0.30) hue-rotate(26deg); transform: scale(1.07); }
+       #web3-status { margin: 20px 0; padding: 13px; background: rgba(240,216,120,0.10); border-radius: 9px; font-family: monospace; color: var(--highlight); min-height: 42px; font-size: 0.94rem; }
+       .toast {
+           position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(15,15,18,0.93);
+           color: var(--metal); padding: 12px 25px; border-radius: 9px; font-size: 0.88rem; z-index: 1000;
+           opacity: 0; transition: opacity 0.32s; pointer-events: none; box-shadow: 0 4px 13px rgba(0,0,0,0.56);
+           border: 1px solid var(--border); font-family: 'Rajdhani', sans-serif; font-weight: 400;
+       }
+       .toast.show { opacity: 1; pointer-events: auto; }
+       .sticky-cta {
+           position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15,13,17,0.95); backdrop-filter: blur(16px);
+           padding: 16px; display: flex; justify-content: center; gap: 17px; z-index: 900; transform: translateY(100%);
+           transition: transform 0.40s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.46); border-top: 1px solid var(--border);
+       }
+       .sticky-cta.show { transform: translateY(0); }
+       .chart-container {
+           position: relative; min-height: 600px; margin: 3rem 0 0; overflow: hidden; border-radius: 14px;
+           box-shadow: var(--glow); background: rgba(18,16,22,0.94); padding-top: 82px;
+       }
+       .chart-title {
+           position: absolute; top: 20px; left: 0; right: 0; text-align: center; color: var(--metal);
+           font-size: 1.50rem; margin: 0; z-index: 2; pointer-events: none;
+           text-shadow: 0 0 8px rgba(0,0,0,0.66); font-family: 'Cinzel', serif; letter-spacing: 1.7px;
+       }
+       .chart-iframe {
+           position: absolute; inset: 0; width: 100%; height: calc(100% - 82px); border: none; top: 82px; left: 0;
+       }
+       @media (max-width: 768px) {
+           .hero-title { font-size: 3.0rem; }
+           .grid-2 { grid-template-columns: 1fr; }
+           .btn { width: 100%; justify-content: center; padding: 15px; font-size: 0.92rem; }
+           section { padding: 78px 13px; }
+           .schematic { gap: 12px; }
+           .schematic-item { min-width: 100px; padding: 14px 16px; font-size: 0.84rem; }
+           .schematic-arrow { font-size: 1.40rem; }
+           .chart-container { min-height: 440px; padding-top: 68px; }
+           .chart-iframe { top: 68px; height: calc(100% - 68px); }
+           .chart-title { top: 14px; font-size: 1.24rem; }
+       }
+       :focus-visible { outline: 2px solid var(--metal); outline-offset: 2.2px; }
+   </style>
 </head>
 <body>
-  <canvas class="molecule-canvas" id="moleculeCanvas" aria-hidden="true"></canvas>
-  <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
-
-  <section id="hero">
-    <div class="container">
-      <h1 class="hero-title">BuckyVault</h1>
-      <p class="hero-subtitle">
-        <span style="background: var(--metal); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; font-family: 'Luxurious Roman', serif;">FUL60</span>
-        embodies the fusion of molecular precision and blockchain sovereignty—each token secured by ≥99.9% pure C₆₀ fullerene in nitrogen-sealed custody, engineered for elite asset preservation.
-      </p>
-      <div style="margin-top: 42px;">
-        <button class="btn btn-primary" aria-label="Trade FUL60 on Uniswap" id="hero-trade-btn">
-          Trade on Uniswap
-        </button>
-        <button class="btn" aria-label="View FUL60 on PolygonScan" onclick="location.href='#blockchain'">
-          View on PolygonScan
-        </button>
-      </div>
-    </div>
-  </section>
-<section id="about">
-  <div class="container">
-    <div class="card">
-      <h2 class="section-title">Project Overview</h2>
-      <p style="max-width:860px; margin:auto; font-size:1.04rem; letter-spacing:0.38px;">
-        BuckyVault issues ERC-20 FUL60 tokens, each representing 1 mg of ≥99.9% C₆₀ fullerene (HPLC/UV–vis verified). Redeemable in 1 g increments via on-chain burn and concierge logistics.
-      </p>
-      <div class="schematic">
-        <div class="schematic-item">Vault</div>
-        <div class="schematic-arrow">⟶</div>
-        <div class="schematic-item">Assay</div>
-        <div class="schematic-arrow">⟶</div>
-        <div class="schematic-item">Token</div>
-        <div class="schematic-arrow">⟶</div>
-        <div class="schematic-item">Uniswap</div>
-        <div class="schematic-arrow">⟶</div>
-        <div class="schematic-item">Redemption</div>
-      </div>
-    </div>
-  </div>
+<canvas class="molecule-canvas" id="moleculeCanvas" aria-hidden="true"></canvas>
+<div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+<section id="hero">
+   <div class="container">
+       <h1 class="hero-title">BuckyVault</h1>
+       <p class="hero-subtitle">
+           <span style="color: var(--metal); font-weight: 600; font-family: 'Cinzel', serif;">FUL60</span>
+           embodies the fusion of molecular precision and blockchain sovereignty—each token secured by ≥99.9% pure C₆₀ fullerene in nitrogen-sealed custody, engineered for elite asset preservation.
+       </p>
+       <div style="margin-top: 42px;">
+           <button class="btn btn-primary" aria-label="Trade FUL60 on Uniswap" id="hero-trade-btn">
+               Trade on Uniswap
+           </button>
+           <button class="btn" aria-label="View FUL60 on PolygonScan" onclick="location.href='#blockchain'">
+               View on PolygonScan
+           </button>
+       </div>
+   </div>
 </section>
-
+<section id="about">
+   <div class="container">
+       <div class="card">
+           <h2 class="section-title">Project Overview</h2>
+           <p style="max-width:860px; margin:auto; font-size:1.04rem; letter-spacing:0.38px;">
+               BuckyVault issues ERC-20 FUL60 tokens, each representing 1 mg of ≥99.9% C₆₀ fullerene (HPLC/UV–vis verified). Redeemable in 1 g increments via on-chain burn and concierge logistics.
+           </p>
+           <div class="schematic">
+               <div class="schematic-item">Vault</div>
+               <div class="schematic-arrow">⟶</div>
+               <div class="schematic-item">Assay</div>
+               <div class="schematic-arrow">⟶</div>
+               <div class="schematic-item">Token</div>
+               <div class="schematic-arrow">⟶</div>
+               <div class="schematic-item">Uniswap</div>
+               <div class="schematic-arrow">⟶</div>
+               <div class="schematic-item">Redemption</div>
+           </div>
+       </div>
+   </div>
+</section>
 <section id="assay-vault">
-  <div class="container">
-    <h2 class="section-title">Custody & Verification</h2>
-    <div class="grid-2">
-      <div class="card proof-item">
-        <p>&gt; Purity ≥99.9% (HPLC + UV–vis).</p>
-        <button class="btn" aria-label="View assay certificate on IPFS" onclick="window.open('https://ipfs.io/ipfs/QmAssayCID')">
-          View Assay on IPFS
-        </button>
-      </div>
-      <div class="card proof-item">
-        <p>&gt; N₂-sealed Class III vault.</p>
-        <button class="btn" aria-label="View vault proof on IPFS" onclick="window.open('https://ipfs.io/ipfs/QmVaultCID')">
-          View Vault Proof
-        </button>
-      </div>
-    </div>
-  </div>
+   <div class="container">
+       <h2 class="section-title">Custody & Verification</h2>
+       <div class="grid-2">
+           <div class="card proof-item">
+               <p>> Purity ≥99.9% (HPLC + UV–vis).</p>
+               <button class="btn" aria-label="View assay certificate on IPFS" onclick="window.open('https://ipfs.io/ipfs/QmAssayCID')">
+                   View Assay on IPFS
+               </button>
+           </div>
+           <div class="card proof-item">
+               <p>> N₂-sealed Class III vault.</p>
+               <button class="btn" aria-label="View vault proof on IPFS" onclick="window.open('https://ipfs.io/ipfs/QmVaultCID')">
+                   View Vault Proof
+               </button>
+           </div>
+       </div>
+   </div>
 </section>
 <section id="tokenomics">
-  <div class="container">
-    <div class="card">
-      <h2 class="section-title">Tokenomics</h2>
-      <table>
-        <tr><th>Parameter</th><th>Value</th></tr>
-        <tr><td>Token Name</td><td>C60 Milligram</td></tr>
-        <tr><td>Symbol</td><td>FUL60</td></tr>
-        <tr><td>Standard</td><td>ERC-20 (Polygon)</td></tr>
-        <tr><td>Total Supply</td><td>5,000 tokens (5 g)</td></tr>
-        <tr><td>Redeemable Increment</td><td>1,000 tokens (1 g)</td></tr>
-        <tr><td>Redemption</td><td>Burn-for-physical</td></tr>
-        <tr><td>Custodian</td><td>N₂ Class III</td></tr>
-        <tr><td>Assay CID</td><td>QmAssayCID</td></tr>
-        <tr><td>Vault CID</td><td>QmVaultCID</td></tr>
-      </table>
-      <div style="text-align:center; margin-top:26px;">
-        <button class="btn" aria-label="View smart contract on PolygonScan" onclick="location.href='#blockchain'">
-          View Contract
-        </button>
-        <button class="btn btn-primary trade-btn" aria-label="Trade FUL60 on Uniswap">
-          Trade on Uniswap
-        </button>
-        <button class="btn" aria-label="Track liquidity on DexTools" onclick="location.href='#blockchain'">
-          Track on DexTools
-        </button>
-      </div>
-    </div>
-  </div>
+   <div class="container">
+       <div class="card">
+           <h2 class="section-title">Tokenomics</h2>
+           <table>
+               <tr><th>Parameter</th><th>Value</th></tr>
+               <tr><td>Token Name</td><td>C60 Milligram</td></tr>
+               <tr><td>Symbol</td><td>FUL60</td></tr>
+               <tr><td>Standard</td><td>ERC-20 (Polygon)</td></tr>
+               <tr><td>Total Supply</td><td>5,000 tokens (5 g)</td></tr>
+               <tr><td>Redeemable Increment</td><td>1,000 tokens (1 g)</td></tr>
+               <tr><td>Redemption</td><td>Burn-for-physical</td></tr>
+               <tr><td>Custodian</td><td>N₂ Class III</td></tr>
+               <tr><td>Assay CID</td><td>QmAssayCID</td></tr>
+               <tr><td>Vault CID</td><td>QmVaultCID</td></tr>
+           </table>
+           <div style="text-align:center; margin-top:26px;">
+               <button class="btn" aria-label="View smart contract on PolygonScan" onclick="location.href='#blockchain'">
+                   View Contract
+               </button>
+               <button class="btn btn-primary trade-btn" aria-label="Trade FUL60 on Uniswap">
+                   Trade on Uniswap
+               </button>
+               <button class="btn" aria-label="Track liquidity on DexTools" onclick="location.href='#blockchain'">
+                   Track on DexTools
+               </button>
+           </div>
+       </div>
+   </div>
 </section>
-
 <section id="redemption">
-  <div class="container">
-    <div class="card">
-      <h2 class="section-title">Redemption Protocol</h2>
-      <ol style="max-width:740px; margin:34px auto; text-align:left; font-size:1.00rem; letter-spacing:0.40px;">
-        <li>Minimum: 1,000 FUL60 (1 g)</li>
-        <li>Process: Burn → Verify → Ship</li>
-        <li>Custodian: N₂ Class III</li>
-        <li>Assay: IPFS CID QmXXXXX</li>
-        <li>Supply deflationary post-redemption</li>
-        <li>Insured logistics fees apply</li>
-      </ol>
-      <div id="web3-status" aria-live="polite"></div>
-      <div style="text-align:center;">
-        <button id="connect-wallet" class="btn" aria-label="Connect MetaMask wallet">Connect Wallet</button>
-        <button id="redeem-btn" class="btn btn-primary" style="display:none;" aria-label="Redeem FUL60 tokens">Redeem Tokens</button>
-      </div>
-    </div>
-  </div>
+   <div class="container">
+       <div class="card">
+           <h2 class="section-title">Redemption Protocol</h2>
+           <ol style="max-width:740px; margin:34px auto; text-align:left; font-size:1.00rem; letter-spacing:0.40px;">
+               <li>Minimum: 1,000 FUL60 (1 g)</li>
+               <li>Process: Burn → Verify → Ship</li>
+               <li>Custodian: N₂ Class III</li>
+               <li>Assay: IPFS CID QmXXXXX</li>
+               <li>Supply deflationary post-redemption</li>
+               <li>Insured logistics fees apply</li>
+           </ol>
+           <div id="web3-status" aria-live="polite"></div>
+           <div style="text-align:center;">
+               <button id="connect-wallet" class="btn" aria-label="Connect MetaMask wallet">Connect Wallet</button>
+               <button id="redeem-btn" class="btn btn-primary" style="display:none;" aria-label="Redeem FUL60 tokens">Redeem Tokens</button>
+           </div>
+       </div>
+   </div>
 </section>
 <section id="blockchain">
-  <div class="container">
-    <div class="card">
-      <h2 class="section-title">Blockchain Integration</h2>
-      <div class="chart-container">
-        <h3 class="chart-title">Live ETH Price & Liquidity (Ethereum)</h3>
-        <iframe class="chart-iframe"
-          title="DEXTools ETH chart"
-          src="https://www.dextools.io/widget-chart/en/ether/pe-dark/0xfb7b4564402e5500db5bb6d63ae671302777c75a?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
-          loading="lazy" allowfullscreen
-          aria-label="Real-time ETH price and liquidity on Ethereum">
-        </iframe>
-      </div>
-      <div style="text-align:center; margin-top: 1.6rem;">
-        <button class="btn btn-primary trade-btn" aria-label="Trade FUL60 on Uniswap">
-          Trade on Uniswap
-        </button>
-        <button class="btn" aria-label="View contract on PolygonScan" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS')">
-          View Contract
-        </button>
-        <button class="btn" aria-label="Track liquidity on DexTools" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS')">
-          Track Liquidity
-        </button>
-        <button class="btn" aria-label="Download project whitepaper" onclick="window.open('whitepaper.pdf')">
-          Download Whitepaper
-        </button>
-      </div>
-      <div class="logo-grid">
-        <img src="https://polygon.technology/_nuxt/img/polygon-logo.88a7f14.svg" alt="Polygon" loading="lazy">
-        <img src="https://uniswap.org/images/uniswap-logo.svg" alt="Uniswap" loading="lazy">
-        <img src="https://ipfs.io/ipfs/bafkreih3w4qwk5l2i5v3r5q3k4r4p2x4z5v6x7c8v9b1n2m3p4q5r6s7t8" alt="IPFS" loading="lazy">
-      </div>
-    </div>
-  </div>
+   <div class="container">
+       <div class="card">
+           <h2 class="section-title">Blockchain Integration</h2>
+           <div class="chart-container">
+               <h3 class="chart-title">Live ETH Price & Liquidity (Ethereum)</h3>
+               <iframe class="chart-iframe"
+                   title="DEXTools ETH chart"
+                   src="https://www.dextools.io/widget-chart/en/ether/pe-dark/0xfb7b4564402e5500db5bb6d63ae671302777c75a?theme=dark&chartType=1&chartResolution=1H&drawingToolbars=false"
+                   loading="lazy" allowfullscreen
+                   aria-label="Real-time ETH price and liquidity on Ethereum">
+               </iframe>
+           </div>
+           <div style="text-align:center; margin-top: 1.6rem;">
+               <button class="btn btn-primary trade-btn" aria-label="Trade FUL60 on Uniswap">
+                   Trade on Uniswap
+               </button>
+               <button class="btn" aria-label="View contract on PolygonScan" onclick="window.open('https://polygonscan.com/token/YOUR_CONTRACT_ADDRESS')">
+                   View Contract
+               </button>
+               <button class="btn" aria-label="Track liquidity on DexTools" onclick="window.open('https://www.dextools.io/app/polygon/pair/YOUR_PAIR_ADDRESS')">
+                   Track Liquidity
+               </button>
+               <button class="btn" aria-label="Download project whitepaper" onclick="window.open('whitepaper.pdf')">
+                   Download Whitepaper
+               </button>
+           </div>
+           <div class="logo-grid">
+               <img src="https://polygon.technology/_nuxt/img/polygon-logo.88a7f14.svg" alt="Polygon" loading="lazy">
+               <img src="https://uniswap.org/images/uniswap-logo.svg" alt="Uniswap" loading="lazy">
+               <img src="https://ipfs.io/ipfs/bafkreih3w4qwk5l2i5v3r5q3k4r4p2x4z5v6x7c8v9b1n2m3p4q5r6s7t8" alt="IPFS" loading="lazy">
+           </div>
+       </div>
+   </div>
 </section>
-
 <footer>
-  © 2025 BuckyVault. All rights reserved.<br>
-  Class III Vault | Polygon ERC-20 | Lab-Verified.<br>
-  <a href="mailto:info@buckyvault.xyz" style="color:var(--metal);">info@buckyvault.xyz</a> |
-  <a href="/privacy" style="color:var(--text-muted);">Privacy</a> |
-  <a href="/terms" style="color:var(--text-muted);">Terms</a>
+   © 2025 BuckyVault. All rights reserved.<br>
+   Class III Vault | Polygon ERC-20 | Lab-Verified.<br>
+   <a href="mailto:info@buckyvault.xyz" style="color:var(--metal);">info@buckyvault.xyz</a> |
+   <a href="/privacy" style="color:var(--text-muted);">Privacy</a> |
+   <a href="/terms" style="color:var(--text-muted);">Terms</a>
 </footer>
-
 <div class="sticky-cta" id="sticky-cta">
-  <button id="sticky-trade-btn" class="btn btn-primary">Trade</button>
-  <button class="btn" id="sticky-redeem" style="display:none;" onclick="document.querySelector('#redeem-btn').click()">Redeem</button>
+   <button id="sticky-trade-btn" class="btn btn-primary">
+       Trade
+   </button>
+   <button class="btn" id="sticky-redeem" style="display:none;" onclick="document.querySelector('#redeem-btn').click()">
+       Redeem
+   </button>
 </div>
-
-<!-- Scripts remain unchanged -->
 <script type="module">
-  // ... your existing Three.js molecule animation code ...
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js';
+const canvas = document.getElementById('moleculeCanvas');
+if (!canvas) throw new Error('Canvas not found');
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5.5;
+const phi = (1 + Math.sqrt(5)) / 2;
+const vertices = [];
+for (let a = -1; a <= 1; a += 2) for (let b = -1; b <= 1; b += 2) {
+  vertices.push(
+    new THREE.Vector3(0, a, b * phi),
+    new THREE.Vector3(a, b * phi, 0),
+    new THREE.Vector3(b * phi, 0, a)
+  );
+}
+vertices.forEach(v => v.normalize().multiplyScalar(1.6));
+const bonds = [
+  [0,1],[1,2],[2,3],[3,4],[4,0], [5,6],[6,7],[7,8],[8,9],[9,5],
+  [10,11],[11,12],[12,13],[13,14],[14,10], [15,16],[16,17],[17,18],[18,19],[19,15],
+  [20,21],[21,22],[22,23],[23,24],[24,20], [25,26],[26,27],[27,28],[28,29],[29,25],
+  [30,31],[31,32],[32,33],[33,34],[34,30], [35,36],[36,37],[37,38],[38,39],[39,35],
+  [40,41],[41,42],[42,43],[43,44],[44,40], [45,46],[46,47],[47,48],[48,49],[49,45],
+  [50,51],[51,52],[52,53],[53,54],[54,50], [55,56],[56,57],[57,58],[58,59],[59,55],
+  [0,10],[0,20],[1,15],[1,25],[2,30],[2,35],[3,40],[3,45],[4,50],[4,55],
+  [5,11],[5,26],[6,16],[6,31],[7,21],[7,36],[8,27],[8,41],[9,32],[9,46],
+  [10,30],[11,35],[12,40],[13,45],[14,50],[15,55],[16,26],[17,31],[18,36],[19,41]
+];
+const positions = new Float32Array(vertices.length * 3);
+vertices.forEach((v, i) => { positions[i*3] = v.x; positions[i*3+1] = v.y; positions[i*3+2] = v.z; });
+const indices = new Uint16Array(bonds.length * 2);
+bonds.forEach(([a,b], i) => { indices[i*2] = a; indices[i*2+1] = b; });
+const geometry = new THREE.BufferGeometry();
+geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+const material = new THREE.LineBasicMaterial({ color: 0xF0D878, opacity: 0.82, transparent: true });
+const molecule = new THREE.LineSegments(geometry, material);
+scene.add(molecule);
+function animate() {
+  requestAnimationFrame(animate);
+  molecule.rotation.x += 0.0035;
+  molecule.rotation.y += 0.0058;
+  renderer.render(scene, camera);
+}
+animate();
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
 </script>
 <script>
-  // ... your existing Web3 wallet connection and redemption logic ...
+  const toast = document.getElementById('toast');
+  function showToast(msg, duration = 3300) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), duration);
+  }
+  function openUniswapTrade() {
+    const url = `https://app.uniswap.org/swap?chain=polygon&inputCurrency=ETH`;
+    window.open(url, '_blank');
+  }
+  document.getElementById('hero-trade-btn')?.addEventListener('click', openUniswapTrade);
+  document.querySelectorAll('.trade-btn').forEach(btn => btn.addEventListener('click', openUniswapTrade));
+  document.getElementById('sticky-trade-btn')?.addEventListener('click', openUniswapTrade);
+  const stickyCTA = document.getElementById('sticky-cta');
+  const stickyTradeBtn = document.getElementById('sticky-trade-btn');
+  const stickyRedeem = document.getElementById('sticky-redeem');
+  const blockchainSection = document.getElementById('blockchain');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      stickyTradeBtn.style.display = entry.isIntersecting ? 'none' : 'inline-flex';
+    });
+  }, { threshold: 0.3 });
+  observer.observe(blockchainSection);
+  window.addEventListener('scroll', () => {
+    const rect = blockchainSection.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight * 0.7 && rect.bottom > 0;
+    stickyTradeBtn.style.display = inView ? 'none' : 'inline-flex';
+    stickyCTA.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
+  });
+  const ABI = [
+    {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnForRedemption","outputs":[],"stateMutability":"nonpayable","type":"function"},
+    {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+    {"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+    {"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"}
+  ];
+  let web3, account, contract;
+  const FUL60_CONTRACT = 'YOUR_FUL60_CONTRACT_ADDRESS';
+  const statusEl = document.getElementById('web3-status');
+  const connectBtn = document.getElementById('connect-wallet');
+  const redeemBtn = document.getElementById('redeem-btn');
+  connectBtn.addEventListener('click', async () => {
+    if (!window.ethereum) return showToast('MetaMask required');
+    try {
+      connectBtn.disabled = true;
+      connectBtn.textContent = 'Connecting...';
+      web3 = new Web3(window.ethereum);
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      [account] = await web3.eth.getAccounts();
+      contract = new web3.eth.Contract(ABI, FUL60_CONTRACT);
+      const [balance, supply, decimals] = await Promise.all([
+        contract.methods.balanceOf(account).call(),
+        contract.methods.totalSupply().call(),
+        contract.methods.decimals().call()
+      ]);
+      const multiplier = 10 ** decimals;
+      const bal = balance / multiplier;
+      statusEl.innerHTML = `Connected: <span style="color:var(--metal);">${account.slice(0,6)}...${account.slice(-4)}</span><br>
+                            Balance: <strong>${bal.toFixed(4)} FUL60</strong><br>
+                            Circulating: <strong>${(supply / multiplier).toFixed(0)} FUL60</strong>`;
+      if (bal >= 1000) {
+        redeemBtn.style.display = 'inline-flex';
+        stickyRedeem.style.display = 'inline-flex';
+      }
+      showToast('Wallet connected');
+    } catch (err) {
+      showToast('Connection failed: ' + err.message);
+    } finally {
+      connectBtn.disabled = false;
+      connectBtn.textContent = 'Connect Wallet';
+    }
+  });
+  redeemBtn.addEventListener('click', async () => {
+    if (!contract) return showToast('Connect wallet first');
+    const amount = prompt('Tokens to redeem (min 1000):');
+    if (!amount || amount < 1000) return showToast('Minimum 1000 FUL60');
+    try {
+      redeemBtn.disabled = true;
+      redeemBtn.textContent = 'Submitting...';
+      const decimals = await contract.methods.decimals().call();
+      const multiplier = 10 ** decimals;
+      await contract.methods.burnForRedemption(web3.utils.toBN(amount * multiplier)).send({ from: account });
+      showToast('Redemption submitted. Contact support for shipment.');
+    } catch (err) {
+      showToast('Failed: ' + err.message);
+    } finally {
+      redeemBtn.disabled = false;
+      redeemBtn.textContent = 'Redeem Tokens';
+    }
+  });
 </script>
 </body>
 </html>
