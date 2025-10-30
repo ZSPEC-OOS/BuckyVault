@@ -338,6 +338,12 @@
     text-align: center;   /* centers content inside cells */
 }
 
+#tokenomics .card .btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
       
    </style>
 </head>
@@ -418,7 +424,7 @@
                <tr><td>Assay CID</td><td>QmAssayCID</td></tr>
                <tr><td>Vault CID</td><td>QmVaultCID</td></tr>
            </table>
-           <div style="text-align:center; margin-top:26px;">
+           <div class="btn-container">
                <button class="btn" aria-label="View smart contract on PolygonScan" onclick="location.href='#blockchain'">
                    View Contract
                </button>
@@ -777,6 +783,7 @@ connectBtn.addEventListener('click', async () => {
 </script>
 </body>
 </html>
+
 
 
 
