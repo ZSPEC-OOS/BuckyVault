@@ -280,6 +280,16 @@
             .redemption-cta { flex-direction: column; }
             .redemption-cta .btn { width: 100%; }
         }
+      /* Tighten card padding */
+#redemption .card {
+    padding: 28px 38px;   /* reduced vertical padding */
+}
+
+/* Reduce gap between stepper and CTA on mobile */
+@media (max-width: 768px) {
+    #redemption .card { padding: 22px 13px; }
+    .redemption-cta { margin-top: 10px; }
+}
    </style>
 </head>
 <body>
@@ -376,7 +386,7 @@
    <div class="container">
        <div class="card shimmer-glow-box">
            <h2 class="section-title">Redemption Protocol</h2>
-          
+        
            <!-- Stepper -->
            <div class="redemption-steps">
                <div class="step active">
@@ -401,9 +411,9 @@
                    </div>
                </div>
            </div>
-           <!-- Status + CTA -->
-           <div id="web3-status" aria-live="polite"></div>
-           <div class="redemption-cta">
+
+           <!-- CTA moved up, reduced top margin -->
+           <div class="redemption-cta" style="margin-top:12px;">
                <button id="connect-wallet" class="btn">Connect Wallet</button>
                <button id="redeem-btn" class="btn btn-primary" style="display:none;">Redeem Tokens</button>
            </div>
@@ -633,45 +643,42 @@ window.addEventListener('resize', () => {
   ];
   let web3, account, contract;
   const FUL60_CONTRACT = 'YOUR_FUL60_CONTRACT_ADDRESS';
-  const statusEl = document.getElementById('web3-status');
   const connectBtn = document.getElementById('connect-wallet');
   const redeemBtn = document.getElementById('redeem-btn');
-  connectBtn.addEventListener('click', async () => {
+connectBtn.addEventListener('click', async () => {
     if (!window.ethereum) return showToast('MetaMask required');
     try {
-      connectBtn.disabled = true;
-      connectBtn.textContent = 'Connecting...';
-      web3 = new Web3(window.ethereum);
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      [account] = await web3.eth.getAccounts();
-      contract = new web3.eth.Contract(ABI, FUL60_CONTRACT);
-      const [balance, supply, decimals] = await Promise.all([
-        contract.methods.balanceOf(account).call(),
-        contract.methods.totalSupply().call(),
-        contract.methods.decimals().call()
-      ]);
-      const multiplier = 10 ** decimals;
-      const bal = balance / multiplier;
-      statusEl.innerHTML = `Connected: <span style="color:var(--metal);">${account.slice(0,6)}...${account.slice(-4)}</span><br>
-                            Balance: <strong>${bal.toFixed(4)} FUL60</strong><br>
-                            Circulating: <strong>${(supply / multiplier).toFixed(0)} FUL60</strong>`;
-      if (bal >= 1000) {
+        connectBtn.disabled = true;
+        connectBtn.textContent = 'Connecting...';
+        web3 = new Web3(window.ethereum);
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        [account] = await web3.eth.getAccounts();
+        contract = new web3.eth.Contract(ABI, FUL60_CONTRACT);
+
+        const [balance, decimals] = await Promise.all([
+            contract.methods.balanceOf(account).call(),
+            contract.methods.decimals().call()
+        ]);
+        const multiplier = 10 ** decimals;
+        const bal = balance / multiplier;
+
+        // Always activate all steps
         document.querySelectorAll('.step').forEach(s => s.classList.add('active'));
-        redeemBtn.style.display = 'inline-flex';
-        stickyRedeem.style.display = 'inline-flex';
-      } else {
-        document.querySelectorAll('.step').forEach((s,i) => {
-            s.classList.toggle('active', i === 0);
-        });
-      }
-      showToast('Wallet connected');
+
+        // Show Redeem button if balance meets threshold
+        if (bal >= 1000) {
+            redeemBtn.style.display = 'inline-flex';
+            stickyRedeem.style.display = 'inline-flex';
+        }
+
+        showToast('Wallet connected');
     } catch (err) {
-      showToast('Connection failed: ' + err.message);
+        showToast('Connection failed: ' + err.message);
     } finally {
-      connectBtn.disabled = false;
-      connectBtn.textContent = 'Connect Wallet';
+        connectBtn.disabled = false;
+        connectBtn.textContent = 'Connect Wallet';
     }
-  });
+});
   redeemBtn.addEventListener('click', async () => {
     if (!contract) return showToast('Connect wallet first');
     const amount = prompt('Tokens to redeem (min 1000):');
@@ -721,5 +728,3 @@ window.addEventListener('resize', () => {
 </script>
 </body>
 </html>
-
-
