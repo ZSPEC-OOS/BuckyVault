@@ -291,17 +291,18 @@
     .redemption-cta { margin-top: 10px; }
 }
 
- .herobgcolor {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(to right, #2a1e4b, #4a0f2a);
-      filter: blur(60px);
-      opacity: 0.5;
-      animation: nebulahero 26s infinite linear;
-      z-index: -2;
-  }
-
+.herobgcolor {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: linear-gradient(to right, #141C32, #28132E); /* dark navy → deep purple */
+    filter: blur(44px);
+    opacity: 0.35; /* slightly dimmer for a more subtle look */
+    animation: nebulahero 26s infinite linear;
+    z-index: -2;
+}
   @keyframes nebulahero {
       0%   { filter: hue-rotate(0deg) saturate(1.1); }
       100% { filter: hue-rotate(360deg) saturate(1.1); }
@@ -747,6 +748,7 @@ connectBtn.addEventListener('click', async () => {
 </script>
 </body>
 </html>
+
 
 
 
