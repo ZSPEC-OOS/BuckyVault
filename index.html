@@ -175,68 +175,59 @@
           drop-shadow(0 0 60px rgba(240,216,120,0.45));
 }
 
-        /* === SHIMMER + PULSE GLOW EFFECT (BORDER-ONLY, WHITE BOX) === */
+        /* === SHIMMER + PULSE GLOW EFFECT (POSITION-FIXED, THEME-PRESERVING) === */
         .shimmer-glow-container {
             position: relative;
-            display: block;
+            display: block; /* Ensures full-width block behavior */
             width: 100%;
         }
         .shimmer-glow-border {
             position: absolute;
-            inset: -8px;
+            inset: -2px;
             border-radius: inherit;
             background: linear-gradient(45deg,
-                #ffffff 0%,
-                #fdf8e0 12%,
-                #fcf1cc 25%,
-                #fdf8e0 38%,
-                #ffffff 50%,
-                #fdf8e0 62%,
-                #fcf1cc 75%,
-                #fdf8e0 88%,
-                #ffffff 100%
+                #ffffff00 0%,
+                #F0D878 15%,
+                #ffffff 30%,
+                #F0D878 50%,
+                #ffffff 70%,
+                #F0D878 85%,
+                #ffffff00 100%
             );
-            background-size: 500% 500%;
-            filter: blur(7px);
-            opacity: 0.95;
+            background-size: 300% 300%;
+            filter: blur(1.5px);
+            opacity: 0.75;
             z-index: -1;
             animation:
-                shimmer 6s linear infinite,
-                glow-pulse 2s ease-in-out infinite alternate;
+                shimmer 4.5s linear infinite,
+                glow-pulse 2.2s ease-in-out infinite alternate;
             pointer-events: none;
         }
         .shimmer-glow-box {
             position: relative;
             z-index: 1;
-            background: #ffffff;
-            color: #000000;
-            font-weight: bold;
-            box-shadow:
-                0 2px 6px rgba(0,0,0,0.3),
-                0 0 5px #ffffff;
-            animation: box-glow 2s ease-in-out infinite alternate;
+            width: 100%;
+            animation: box-glow 2.2s ease-in-out infinite alternate;
         }
         @keyframes shimmer {
             0% { background-position: 0% 50%; }
-            100% { background-position: 500% 50%; }
+            100% { background-position: 300% 50%; }
         }
         @keyframes glow-pulse {
             0% {
                 box-shadow:
-                    0 0 5px #ffffff,
-                    0 0 10px #fcf1cc,
-                    0 0 15px #fcf1cc;
+                    0 0 4px rgba(240,216,120,0.3),
+                    0 0 8px rgba(240,216,120,0.2);
             }
             100% {
                 box-shadow:
-                    0 0 20px #ffffff,
-                    0 0 30px #fcf1cc,
-                    0 0 40px #fcf1cc;
+                    0 0 12px rgba(240,216,120,0.6),
+                    0 0 20px rgba(240,216,120,0.4);
             }
         }
         @keyframes box-glow {
-            0% { box-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 5px #ffffff; }
-            100% { box-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 25px #fcf1cc, 0 0 35px #fcf1cc; }
+            0% { box-shadow: var(--glow), 0 15px 48px rgba(0,0,0,0.65); }
+            100% { box-shadow: 0 0 28px rgba(240,216,120,0.55), 0 15px 48px rgba(0,0,0,0.65); }
         }
    </style>
 </head>
@@ -546,7 +537,7 @@ window.addEventListener('resize', () => {
     }
   });
 
-  // === SHIMMER + PULSE GLOW INJECTOR (BORDER-ONLY) ===
+  // === SHIMMER + PULSE GLOW INJECTOR (POSITION-FIXED) ===
   (function() {
       function applyShimmerEffect() {
           document.querySelectorAll('.shimmer-glow-box').forEach(el => {
