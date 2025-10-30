@@ -41,20 +41,15 @@
        }
 
 
-      #overview .features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 28px;
-}
-
-#overview .feature-card {
+   #overview .feature-card {
   padding: 38px;
-  background: rgba(0,0,0,0.05);
-  border: 2px dashed rgba(240,216,120,0.5);
+  background: var(--card-bg, rgba(0,0,0,0.75));
+  border: 2px dashed var(--border, rgba(240,216,120,0.3));
   border-radius: 16px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 0 12px rgba(0,0,0,0.1);
-  color: #f0d878;
+  backdrop-filter: blur(22px);
+  box-shadow: 0 0 22px rgba(240,216,120,0.3), 0 15px 48px rgba(0,0,0,0.65);
+  position: relative;
+  color: var(--metal, #f0d878);
   font-family: 'Cinzel', serif;
   letter-spacing: 1px;
   text-align: left;
@@ -62,15 +57,21 @@
 
 #overview .feature-card h3 {
   font-size: 1.26rem;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 #overview .feature-card p {
   font-size: 0.94rem;
-  color: #ccc;
+  color: var(--text-muted, #ccc);
   line-height: 1.45;
 }
 
+#overview .features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  margin-top: 2rem;
+}
 
       
        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -842,6 +843,7 @@ connectBtn.addEventListener('click', async () => {
 </script>
 </body>
 </html>
+
 
 
 
