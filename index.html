@@ -40,20 +40,26 @@
            --glow: 0 0 20px rgba(240,216,120,0.38);
        }
 
-#overview .feature-card {
-  padding: 38px;
-  background: rgba(0, 0, 0, 0.75); /* semi-transparent dark background */
-  border: 2px dashed rgba(240, 216, 120, 0.3); /* dashed border */
-  border-radius: 16px;
-  backdrop-filter: blur(22px); /* subtle blur behind card */
-  box-shadow: 0 0 22px rgba(240, 216, 120, 0.3), 0 15px 48px rgba(0, 0, 0, 0.65); /* glow */
-  position: relative;
-  color: var(--metal, #f0d878);
-  font-family: 'Cinzel', serif;
-  letter-spacing: 1px;
+
+      #overview .features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
 }
 
-/* Typography inside the cards */
+#overview .feature-card {
+  padding: 38px;
+  background: rgba(0,0,0,0.05);
+  border: 2px dashed rgba(240,216,120,0.5);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  color: #f0d878;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+  text-align: left;
+}
+
 #overview .feature-card h3 {
   font-size: 1.26rem;
   margin-bottom: 8px;
@@ -61,16 +67,8 @@
 
 #overview .feature-card p {
   font-size: 0.94rem;
-  color: var(--text-muted, #ccc);
+  color: #ccc;
   line-height: 1.45;
-}
-
-/* Remove hover transform/glow effect */
-#overview .feature-card:hover {
-  background: rgba(0, 0, 0, 0.75); /* stay same on hover */
-  border-color: rgba(240, 216, 120, 0.3); /* keep dashed border same */
-  transform: none;
-  box-shadow: 0 0 22px rgba(240, 216, 120, 0.3), 0 15px 48px rgba(0, 0, 0, 0.65);
 }
 
 
@@ -415,37 +413,18 @@
 
       <div class="features grid-2" style="gap: 28px;">
         <div class="feature-card shimmer-glow-box">
-          <h3>Instant Transfer</h3>
-          <p>Send and receive FUL60 tokens worldwide instantly, without moving physical material. Your ownership is digital, safe, and traceable.</p>
+          <h3>Fullerenes & Their Importance</h3>
+          <p>C₆₀ fullerenes are stable, strong carbon spheres with unique electrical properties, valuable in medicine, electronics, and nanotechnology.</p>
         </div>
         <div class="feature-card shimmer-glow-box">
-          <h3>Divisible & Transparent</h3>
-          <p>Each token represents a precise milligram of verified C<sub>60</sub>. Hold, trade, or invest in fractions safely with complete transparency.</p>
-        </div>
-        <div class="feature-card shimmer-glow-box">
-          <h3>Secure Storage</h3>
-          <p>All fullerenes are stored in Class III nitrogen-sealed vaults, audited regularly for purity and weight. You never have to touch the material directly.</p>
-        </div>
-        <div class="feature-card shimmer-glow-box">
-          <h3>What They Are</h3>
-          <p>Fullerenes are carbon molecules shaped like tiny spheres or cages. C<sub>60</sub>, the “buckyball,” has 60 carbon atoms arranged like a soccer ball.</p>
-        </div>
-        <div class="feature-card shimmer-glow-box">
-          <h3>Complex Synthesis</h3>
-          <p>High-purity C<sub>60</sub> is difficult to produce. It requires precise conditions, controlled environments, and advanced purification techniques, which makes it rare.</p>
-        </div>
-        <div class="feature-card shimmer-glow-box">
-          <h3>Rarity & Value</h3>
-          <p>Due to its complex production, pure C<sub>60</sub> is rare and highly valued for research, high-tech applications, and collectors.</p>
-        </div>
-        <div class="feature-card shimmer-glow-box">
-          <h3>Why It Matters</h3>
-          <p>Fullerenes have unique properties: stable, strong, and electrically interesting. They are explored for medical, electronics, and nanotechnology applications.</p>
+          <h3>Rarity & Production</h3>
+          <p>High-purity C₆₀ is rare, requiring precise synthesis and purification, making it highly valued for research and advanced applications.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
+
 
    
 <section id="about">
@@ -863,6 +842,7 @@ connectBtn.addEventListener('click', async () => {
 </script>
 </body>
 </html>
+
 
 
 
