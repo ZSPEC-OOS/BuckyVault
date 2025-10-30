@@ -161,20 +161,10 @@
   height: auto;
   display: block;
   margin: 0 auto 0.45rem;
-  filter: drop-shadow(0 0 20px rgba(240,216,120,0.52))
-          drop-shadow(0 0 44px rgba(240,216,120,0.30));
-  transition: transform 0.4s ease;
-}
-.logo-img {
-  max-width: 420px;
-  width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto 0.45rem;
   filter: drop-shadow(0 0 30px rgba(240,216,120,0.65))
           drop-shadow(0 0 60px rgba(240,216,120,0.45));
+  transition: transform 0.4s ease;
 }
-
         /* === SHIMMER + PULSE GLOW EFFECT (POSITION-FIXED, THEME-PRESERVING) === */
         .shimmer-glow-container {
             position: relative;
@@ -228,6 +218,67 @@
         @keyframes box-glow {
             0% { box-shadow: var(--glow), 0 15px 48px rgba(0,0,0,0.65); }
             100% { box-shadow: 0 0 28px rgba(240,216,120,0.55), 0 15px 48px rgba(0,0,0,0.65); }
+        }
+        .redemption-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 680px;
+            margin: 36px auto 28px;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 16px;
+            background: rgba(240,216,120,0.08);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .step.active {
+            background: rgba(240,216,120,0.15);
+            border-color: var(--metal);
+            box-shadow: 0 0 14px rgba(240,216,120,0.3);
+        }
+        .step-icon {
+            flex: 0 0 46px;
+            width: 46px; height: 46px;
+            background: var(--metal);
+            color: #000;
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(240,216,120,0.5);
+        }
+        .step-content h4 {
+            margin: 0 0 4px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.06rem;
+            color: var(--metal);
+            letter-spacing: 1.2px;
+        }
+        .step-content p {
+            margin: 0;
+            font-size: 0.94rem;
+            color: var(--text-muted);
+        }
+        .redemption-cta {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 12px;
+        }
+        @media (max-width: 768px) {
+            .redemption-steps { gap: 18px; margin: 28px auto 20px; }
+            .step { padding: 14px; gap: 14px; }
+            .step-icon { flex: 0 0 40px; width: 40px; height: 40px; font-size: 1.2rem; }
+            .redemption-cta { flex-direction: column; }
+            .redemption-cta .btn { width: 100%; }
         }
    </style>
 </head>
@@ -325,18 +376,37 @@
    <div class="container">
        <div class="card shimmer-glow-box">
            <h2 class="section-title">Redemption Protocol</h2>
-           <ol style="max-width:740px; margin:34px auto; text-align:left; font-size:1.00rem; letter-spacing:0.40px;">
-               <li>Minimum: 1,000 FUL60 (1 g)</li>
-               <li>Process: Burn → Verify → Ship</li>
-               <li>Custodian: N₂ Class III</li>
-               <li>Assay: IPFS CID QmXXXXX</li>
-               <li>Supply deflationary post-redemption</li>
-               <li>Insured logistics fees apply</li>
-           </ol>
+           
+           <!-- Stepper -->
+           <div class="redemption-steps">
+               <div class="step active">
+                   <div class="step-icon">1</div>
+                   <div class="step-content">
+                       <h4>Minimum Threshold</h4>
+                       <p>1,000 FUL60 (1 g C₆₀)</p>
+                   </div>
+               </div>
+               <div class="step">
+                   <div class="step-icon">2</div>
+                   <div class="step-content">
+                       <h4>Burn & Verify</h4>
+                       <p>On-chain burn → IPFS assay match</p>
+                   </div>
+               </div>
+               <div class="step">
+                   <div class="step-icon">3</div>
+                   <div class="step-content">
+                       <h4>Concierge Shipment</h4>
+                       <p>Insured N₂-sealed vial via Brink’s</p>
+                   </div>
+               </div>
+           </div>
+
+           <!-- Status + CTA -->
            <div id="web3-status" aria-live="polite"></div>
-           <div style="text-align:center;">
-               <button id="connect-wallet" class="btn" aria-label="Connect MetaMask wallet">Connect Wallet</button>
-               <button id="redeem-btn" class="btn btn-primary" style="display:none;" aria-label="Redeem FUL60 tokens">Redeem Tokens</button>
+           <div class="redemption-cta">
+               <button id="connect-wallet" class="btn">Connect Wallet</button>
+               <button id="redeem-btn" class="btn btn-primary" style="display:none;">Redeem Tokens</button>
            </div>
        </div>
    </div>
@@ -507,8 +577,13 @@ window.addEventListener('resize', () => {
                             Balance: <strong>${bal.toFixed(4)} FUL60</strong><br>
                             Circulating: <strong>${(supply / multiplier).toFixed(0)} FUL60</strong>`;
       if (bal >= 1000) {
+        document.querySelectorAll('.step').forEach(s => s.classList.add('active'));
         redeemBtn.style.display = 'inline-flex';
         stickyRedeem.style.display = 'inline-flex';
+      } else {
+        document.querySelectorAll('.step').forEach((s,i) => {
+            s.classList.toggle('active', i === 0);
+        });
       }
       showToast('Wallet connected');
     } catch (err) {
@@ -536,7 +611,6 @@ window.addEventListener('resize', () => {
       redeemBtn.textContent = 'Redeem Tokens';
     }
   });
-
   // === SHIMMER + PULSE GLOW INJECTOR (POSITION-FIXED) ===
   (function() {
       function applyShimmerEffect() {
