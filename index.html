@@ -468,7 +468,7 @@ const renderer = new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
-camera.position.z = 9; // ZOOMED OUT: was 6 → now 9
+camera.position.z = 12; // ZOOMED OUT: was 6 → now 9
 const scene = new THREE.Scene();
 // === Vertices from XYZ ===
 const vertices = [
@@ -721,3 +721,4 @@ window.addEventListener('resize', () => {
 </script>
 </body>
 </html>
+
