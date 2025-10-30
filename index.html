@@ -41,14 +41,25 @@
        }
 
 
-   #overview .feature-card {
+
+#overview .features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* ensures two per row on larger screens */
+  gap: 28px;
+  margin-top: 2rem;
+  align-items: stretch; /* forces all cards to same height */
+}
+
+#overview .feature-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   padding: 38px;
   background: var(--card-bg, rgba(0,0,0,0.75));
   border: 2px dashed var(--border, rgba(240,216,120,0.3));
   border-radius: 16px;
   backdrop-filter: blur(22px);
   box-shadow: 0 0 22px rgba(240,216,120,0.3), 0 15px 48px rgba(0,0,0,0.65);
-  position: relative;
   color: var(--metal, #f0d878);
   font-family: 'Cinzel', serif;
   letter-spacing: 1px;
@@ -66,12 +77,9 @@
   line-height: 1.45;
 }
 
-#overview .features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 28px;
-  margin-top: 2rem;
-}
+
+
+      
 
       
        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -406,25 +414,24 @@
 
 <section id="overview">
   <div class="container">
-    <div class="card shimmer-glow-box">
-      <h2 class="section-title">Bringing Nanotechnology to Your Wallet</h2>
-      <p class="tagline" style="max-width:860px; margin:auto; font-size:1.04rem; color: var(--text-muted);">
-        FUL60 tokens give you secure digital ownership of high-purity C<sub>60</sub> fullerenes. Experience the benefits of rare nanomaterials without handling, storing, or verifying physical molecules yourself.
-      </p>
+    <h2 class="section-title">BuckyVault: Bringing Nanotechnology to Your Wallet</h2>
+    <p class="tagline" style="max-width:860px; margin:auto; font-size:1.04rem; color: var(--text-muted);">
+      FUL60 tokens give you secure digital ownership of high-purity C<sub>60</sub> fullerenes. Experience the benefits of rare nanomaterials without handling, storing, or verifying physical molecules yourself.
+    </p>
 
-      <div class="features grid-2" style="gap: 28px;">
-        <div class="feature-card shimmer-glow-box">
-          <h3>Fullerenes & Their Importance</h3>
-          <p>C₆₀ fullerenes are stable, strong carbon spheres with unique electrical properties, valuable in medicine, electronics, and nanotechnology.</p>
-        </div>
-        <div class="feature-card shimmer-glow-box">
-          <h3>Rarity & Production</h3>
-          <p>High-purity C₆₀ is rare, requiring precise synthesis and purification, making it highly valued for research and advanced applications.</p>
-        </div>
+    <div class="features">
+      <div class="feature-card">
+        <h3>Fullerenes & Their Importance</h3>
+        <p>C₆₀ fullerenes are stable, strong carbon spheres with unique electrical properties, valuable in medicine, electronics, and nanotechnology.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Rarity & Production</h3>
+        <p>High-purity C₆₀ is rare, requiring precise synthesis and purification, making it highly valued for research and advanced applications.</p>
       </div>
     </div>
   </div>
 </section>
+
 
 
    
@@ -843,6 +850,7 @@ connectBtn.addEventListener('click', async () => {
 </script>
 </body>
 </html>
+
 
 
 
