@@ -290,9 +290,28 @@
     #redemption .card { padding: 22px 13px; }
     .redemption-cta { margin-top: 10px; }
 }
+
+ .herobgcolor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(to right, #3a2a60, #6b1a3a);
+      filter: blur(44px);
+      opacity: 0.38;
+      animation: nebulahero 26s infinite linear;
+      z-index: -2;
+  }
+
+  @keyframes nebulahero {
+      0%   { filter: hue-rotate(0deg) saturate(1.1); }
+      100% { filter: hue-rotate(360deg) saturate(1.1); }
+  }
+
+      
    </style>
 </head>
 <body>
+<div class="herobgcolor"></div>      <!-- Nebula gradient background -->
 <canvas class="molecule-canvas" id="moleculeCanvas" aria-hidden="true"></canvas>
 <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
 <section id="hero">
@@ -728,3 +747,4 @@ connectBtn.addEventListener('click', async () => {
 </script>
 </body>
 </html>
+
