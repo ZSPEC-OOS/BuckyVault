@@ -39,6 +39,65 @@
            --border: rgba(240,216,120,0.42);
            --glow: 0 0 20px rgba(240,216,120,0.38);
        }
+
+
+#overview {
+  max-width: 1100px;
+  margin: 50px auto;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+#overview .section-title {
+  color: var(--metal, #f0d878);
+  text-shadow: 0 0 12px rgba(240,216,120,0.40);
+  margin-bottom: 1.5rem;
+}
+
+#overview .tagline {
+  color: var(--text-muted, #ccc);
+  font-style: italic;
+  margin-bottom: 2.5rem;
+  font-size: 1.04rem;
+}
+
+#overview .features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+#overview .feature-card {
+  background: rgba(240,216,120,0.08);
+  border: 1px solid var(--border, rgba(240,216,120,0.2));
+  border-radius: 12px;
+  padding: 26px;
+  transition: all 0.36s ease;
+  color: var(--metal, #f0d878);
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+}
+
+#overview .feature-card h3 {
+  font-size: 1.26rem;
+  margin-bottom: 8px;
+}
+
+#overview .feature-card p {
+  font-size: 0.94rem;
+  color: var(--text-muted, #ccc);
+  line-height: 1.45;
+}
+
+#overview .feature-card:hover {
+  background: rgba(240,216,120,0.18);
+  border-color: var(--metal, #f0d878);
+  transform: translateY(-2px);
+  box-shadow: 0 0 14px rgba(240,216,120,0.3);
+}
+
+
+      
        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
        body {
            font-family: 'Rajdhani', sans-serif; color: var(--text); background: var(--bg); line-height:1.72;
@@ -368,6 +427,50 @@
 </div>
    </div>
 </section>
+
+<section id="overview">
+  <div class="container">
+    <div class="card shimmer-glow-box">
+      <h2 class="section-title">BuckyVault: Bringing Nanotechnology to Your Wallet</h2>
+      <p class="tagline" style="max-width:860px; margin:auto; font-size:1.04rem; color: var(--text-muted);">
+        FUL60 tokens give you secure digital ownership of high-purity C<sub>60</sub> fullerenes. Experience the benefits of rare nanomaterials without handling, storing, or verifying physical molecules yourself.
+      </p>
+
+      <div class="features grid-2" style="gap: 28px;">
+        <div class="feature-card shimmer-glow-box">
+          <h3>Instant Transfer</h3>
+          <p>Send and receive FUL60 tokens worldwide instantly, without moving physical material. Your ownership is digital, safe, and traceable.</p>
+        </div>
+        <div class="feature-card shimmer-glow-box">
+          <h3>Divisible & Transparent</h3>
+          <p>Each token represents a precise milligram of verified C<sub>60</sub>. Hold, trade, or invest in fractions safely with complete transparency.</p>
+        </div>
+        <div class="feature-card shimmer-glow-box">
+          <h3>Secure Storage</h3>
+          <p>All fullerenes are stored in Class III nitrogen-sealed vaults, audited regularly for purity and weight. You never have to touch the material directly.</p>
+        </div>
+        <div class="feature-card shimmer-glow-box">
+          <h3>What They Are</h3>
+          <p>Fullerenes are carbon molecules shaped like tiny spheres or cages. C<sub>60</sub>, the “buckyball,” has 60 carbon atoms arranged like a soccer ball.</p>
+        </div>
+        <div class="feature-card shimmer-glow-box">
+          <h3>Complex Synthesis</h3>
+          <p>High-purity C<sub>60</sub> is difficult to produce. It requires precise conditions, controlled environments, and advanced purification techniques, which makes it rare.</p>
+        </div>
+        <div class="feature-card shimmer-glow-box">
+          <h3>Rarity & Value</h3>
+          <p>Due to its complex production, pure C<sub>60</sub> is rare and highly valued for research, high-tech applications, and collectors.</p>
+        </div>
+        <div class="feature-card shimmer-glow-box">
+          <h3>Why It Matters</h3>
+          <p>Fullerenes have unique properties: stable, strong, and electrically interesting. They are explored for medical, electronics, and nanotechnology applications.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+   
 <section id="about">
    <div class="container">
        <div class="card shimmer-glow-box">
@@ -783,6 +886,7 @@ connectBtn.addEventListener('click', async () => {
 </script>
 </body>
 </html>
+
 
 
 
