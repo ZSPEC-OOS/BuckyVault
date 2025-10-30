@@ -175,14 +175,15 @@
           drop-shadow(0 0 60px rgba(240,216,120,0.45));
 }
 
-        /* === SHIMMER + PULSE GLOW EFFECT (THEME-PRESERVING) === */
+        /* === SHIMMER + PULSE GLOW EFFECT (POSITION-FIXED, THEME-PRESERVING) === */
         .shimmer-glow-container {
             position: relative;
-            display: inline-block;
+            display: block; /* Ensures full-width block behavior */
+            width: 100%;
         }
         .shimmer-glow-border {
             position: absolute;
-            inset: -2px; /* Tight fit to card edge */
+            inset: -2px;
             border-radius: inherit;
             background: linear-gradient(45deg,
                 #ffffff00 0%,
@@ -205,6 +206,7 @@
         .shimmer-glow-box {
             position: relative;
             z-index: 1;
+            width: 100%;
             animation: box-glow 2.2s ease-in-out infinite alternate;
         }
         @keyframes shimmer {
@@ -535,7 +537,7 @@ window.addEventListener('resize', () => {
     }
   });
 
-  // === SHIMMER + PULSE GLOW INJECTOR (PRESERVE CARD COLORS) ===
+  // === SHIMMER + PULSE GLOW INJECTOR (POSITION-FIXED) ===
   (function() {
       function applyShimmerEffect() {
           document.querySelectorAll('.shimmer-glow-box').forEach(el => {
