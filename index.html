@@ -290,7 +290,22 @@
     #redemption .card { padding: 22px 13px; }
     .redemption-cta { margin-top: 10px; }
 }
+/* === Hero Buttons Equal Size === */
+.hero-btns {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
 
+.hero-btns .btn {
+    flex: 1;
+    max-width: 240px;
+    text-align: center;
+}
+
+
+      
 .herobgcolor {
     position: fixed;
     top: 0; 
@@ -321,14 +336,14 @@
            <span style="color: var(--metal); font-weight: 600; font-family: 'Cinzel', serif;">FUL60</span>
            pioneers a new class of digital tokens, each backed by laboratory-verified ≥99% pure C₆₀ fullerene, preserved in N₂-sealed vials and secured within a vault engineered for unparalleled molecular longevity and structural integrity.
        </p>
-       <div style="margin-top: 42px;">
-           <button class="btn btn-primary" aria-label="Trade FUL60 on Uniswap" id="hero-trade-btn">
-               Trade on Uniswap
-           </button>
-           <button class="btn" aria-label="View FUL60 on PolygonScan" onclick="location.href='#blockchain'">
-               View on PolygonScan
-           </button>
-       </div>
+    <div class="hero-btns">
+    <button class="btn btn-primary" aria-label="Trade FUL60 on Uniswap" id="hero-trade-btn">
+        Trade on Uniswap
+    </button>
+    <button class="btn" aria-label="View FUL60 on PolygonScan" onclick="location.href='#blockchain'">
+        View on PolygonScan
+    </button>
+</div>
    </div>
 </section>
 <section id="about">
@@ -747,6 +762,7 @@ connectBtn.addEventListener('click', async () => {
 </script>
 </body>
 </html>
+
 
 
 
