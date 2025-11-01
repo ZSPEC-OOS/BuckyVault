@@ -5,17 +5,17 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta name="description" content="FUL60 NFTs — each NFT represents 1 g of verified C₆₀ fullerene, fully backed and redeemable. 100 limited NFTs.">
    <!-- SEO & Social -->
-   <meta property="og:title" content="FUL60 NFT Collection — BuckyVault">
+   <meta property="og:title" content="FUL60 NFT Collection">
    <meta property="og:description" content="100 limited NFTs. Each NFT = 1 g of verified C₆₀ fullerene, physically backed, auditable, and optionally redeemable.">
    <meta property="og:image" content="https://buckyvault.xyz/og.png">
    <meta property="og:url" content="https://buckyvault.xyz/nft-collection">
    <meta property="og:type" content="website">
    <meta name="twitter:card" content="summary_large_image">
-   <meta name="twitter:title" content="FUL60 NFT Collection — BuckyVault">
+   <meta name="twitter:title" content="FUL60 NFT Collection">
    <meta name="twitter:description" content="100 limited NFTs backed by physical C₆₀ fullerene.">
    <meta name="twitter:image" content="https://buckyvault.xyz/og.png">
-   <title>FUL60 NFT Collection — BuckyVault</title>
-   <!-- Fonts -->
+   <title>FUL60 NFT Collection</title>
+   <!-- Fonts (with fallback) -->
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
@@ -24,22 +24,19 @@
    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-   <!-- Preload Font -->
-   <link rel="preload" href="https://fonts.gstatic.com/s/rajdhani/v15/LDIxapCLg6e2RxJ2l3ZV9A.woff2" as="font" type="font/woff2" crossorigin>
    <style>
        :root {
-           --bg: #141418; /* Luminous deep slate */
-           --metal: #F0D878; /* Radiant pale gold */
-           --accent: #E8C070; /* Warm champagne */
-           --accent-light: #FFF8E1; /* Creamy ivory */
-           --text: #FFFFFF; /* Pure white */
-           --text-muted: #F0E6D2; /* Soft cream */
-           --highlight: #FFD700; /* Electric gold */
+           --bg: #141418;
+           --metal: #F0D878;
+           --accent: #E8C070;
+           --accent-light: #FFF8E1;
+           --text: #FFFFFF;
+           --text-muted: #F0E6D2;
+           --highlight: #FFD700;
            --card-bg: linear-gradient(135deg, rgba(25,23,28,0.94), rgba(35,32,40,0.91));
            --border: rgba(240,216,120,0.42);
            --glow: 0 0 20px rgba(240,216,120,0.38);
        }
-
        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
        body {
            font-family: 'Rajdhani', sans-serif; color: var(--text); background: var(--bg); line-height:1.72;
@@ -93,36 +90,26 @@
        footer { text-align: center; padding: 32px; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border); }
        a { color: var(--metal); text-decoration: none; }
        a:hover { text-decoration: underline; }
-       /* Shimmer Effect */
-       .shimmer-glow-container { position: relative; display: block; width: 100%; }
-       .shimmer-glow-border { position: absolute; inset: -2px; border-radius: inherit; background: linear-gradient(45deg, #ffffff00 0%, #F0D878 15%, #ffffff 30%, #F0D878 50%, #ffffff 70%, #F0D878 85%, #ffffff00 100%); background-size: 300% 300%; filter: blur(1.5px); opacity: 0.75; z-index: -1; animation: shimmer 4.5s linear infinite, glow-pulse 2.2s ease-in-out infinite alternate; pointer-events: none; }
-       .shimmer-glow-box { position: relative; z-index: 1; width: 100%; animation: box-glow 2.2s ease-in-out infinite alternate; }
-       @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
-       @keyframes glow-pulse { 0% { box-shadow: 0 0 4px rgba(240,216,120,0.3), 0 0 8px rgba(240,216,120,0.2); } 100% { box-shadow: 0 0 12px rgba(240,216,120,0.6), 0 0 20px rgba(240,216,120,0.4); } }
-       @keyframes box-glow { 0% { box-shadow: var(--glow), 0 15px 48px rgba(0,0,0,0.65); } 100% { box-shadow: 0 0 28px rgba(240,216,120,0.55), 0 15px 48px rgba(0,0,0,0.65); } }
        /* Responsive */
        @media (max-width: 980px) { main { grid-template-columns: 1fr; gap: 24px; } aside { order: 2; } }
        @media (max-width: 768px) { .hero { flex-direction: column; text-align: center; } .grid { grid-template-columns: 1fr; } .nft-list { grid-template-columns: 1fr; } section { padding: 24px 16px; } }
        :focus-visible { outline: 2px solid var(--metal); outline-offset: 2px; }
+       /* Static glow (shimmer removed) */
+       .card { animation: box-glow 2.2s ease-in-out infinite alternate; }
+       @keyframes box-glow { 0% { box-shadow: var(--glow), 0 15px 48px rgba(0,0,0,0.65); } 100% { box-shadow: 0 0 28px rgba(240,216,120,0.55), 0 15px 48px rgba(0,0,0,0.65); } }
    </style>
 </head>
 <body>
-   <div class="herobgcolor" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, #141C32, #28132E); filter: blur(44px); opacity: 1.0; animation: nebulahero 26s infinite linear; z-index: -2;"></div>
-   <canvas class="molecule-canvas" id="moleculeCanvas" aria-hidden="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.32; pointer-events: none; z-index: -1;"></canvas>
-
    <div class="container">
-       <header style="display: flex; gap: 20px; align-items: center; margin: 32px 0;">
-           <div style="width: 64px; height: 64px; background: linear-gradient(135deg, var(--metal), var(--accent)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; box-shadow: var(--glow);">FV</div>
-           <div>
-               <h1 style="font-size: 2rem; margin: 0; color: var(--metal);">FUL60 NFT Collection — BuckyVault</h1>
-               <p style="margin: 0; color: var(--text-muted); font-size: 1rem;">100 limited NFTs. Each NFT = 1 g of verified C₆₀ fullerene, physically backed, auditable, and optionally redeemable.</p>
-           </div>
+       <header style="text-align: center; margin: 32px 0;">
+           <h1 style="font-size: 2rem; margin: 0; color: var(--metal);">FUL60 NFT Collection</h1>
+           <p style="margin: 8px 0 0; color: var(--text-muted); font-size: 1rem;">100 limited NFTs. Each NFT = 1 g of verified C₆₀ fullerene, physically backed, auditable, and optionally redeemable.</p>
        </header>
 
        <main>
            <!-- Left Column: Main Content -->
            <div>
-               <section class="card hero shimmer-glow-box" aria-labelledby="hero-title">
+               <section class="card hero" aria-labelledby="hero-title">
                    <div class="art" aria-hidden="true">C<sub>60</sub></div>
                    <div>
                        <h2 id="hero-title" style="margin: 0 0 8px 0; font-size: 1.5rem; color: var(--metal);">100 x 1 g FUL60 NFTs</h2>
@@ -135,7 +122,7 @@
                    </div>
                </section>
 
-               <section class="card shimmer-glow-box" style="margin-top: 24px;" aria-labelledby="nft-collection-title">
+               <section class="card" style="margin-top: 24px;" aria-labelledby="nft-collection-title">
                    <h3 id="nft-collection-title" class="section-title" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--metal);">NFT Collection Preview</h3>
                    <p class="small" style="margin: 0 0 16px 0;">Click an NFT to view metadata and redemption options. These are placeholders; replace images and metadata links after minting.</p>
                    <div class="nft-list" id="nftList" aria-live="polite">
@@ -161,11 +148,10 @@
                                </div>
                            </div>
                        </article>
-                       <!-- Add more NFTs dynamically or statically up to 100 -->
                    </div>
                </section>
 
-               <section class="card shimmer-glow-box" style="margin-top: 24px;">
+               <section class="card" style="margin-top: 24px;">
                    <h3 class="section-title" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--metal);">Proof of Reserve & Lab Documentation</h3>
                    <p style="margin: 0 0 16px 0; color: var(--text-muted);">Transparency is mandatory. Publish these items and link them from NFT metadata:</p>
                    <ul style="color: var(--text-muted); line-height: 1.6;">
@@ -176,7 +162,7 @@
                    </ul>
                </section>
 
-               <section class="card shimmer-glow-box" style="margin-top: 24px;">
+               <section class="card" style="margin-top: 24px;">
                    <h3 class="section-title" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--metal);">Redemption Policy</h3>
                    <p style="color: var(--text-muted);">You may choose redeemable, non-redeemable, or hybrid NFTs. A recommended redeemable flow:</p>
                    <ol style="color: var(--text-muted); padding-left: 20px;">
@@ -188,7 +174,7 @@
                    <p style="margin: 8px 0 0 0; color: var(--highlight); font-weight: 500;"><strong>Warning:</strong> physical transfers require compliance and safety procedures. Specify how redemption handles hazardous shipping rules if applicable.</p>
                </section>
 
-               <section class="card shimmer-glow-box" style="margin-top: 24px;">
+               <section class="card" style="margin-top: 24px;">
                    <h3 class="section-title" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--metal);">NFT Metadata Example</h3>
                    <pre>{
   "name": "FUL60 #001",
@@ -208,7 +194,7 @@
 }</pre>
                </section>
 
-               <section class="card shimmer-glow-box" style="margin-top: 24px;">
+               <section class="card" style="margin-top: 24px;">
                    <h3 class="section-title" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--metal);">FAQ</h3>
                    <div>
                        <details><summary>What does the NFT represent?</summary><div style="margin-top: 8px; color: var(--text-muted);">Each NFT is a digital certificate representing 1 gram of physically stored C₆₀ fullerene held in our vault and verifiable via batch documentation.</div></details>
@@ -220,7 +206,7 @@
 
            <!-- Right Column: Sidebar -->
            <aside>
-               <div class="card cta shimmer-glow-box" aria-labelledby="cta-title">
+               <div class="card cta" aria-labelledby="cta-title">
                    <h3 id="cta-title" style="font-size: 1.4rem; margin: 0 0 12px 0; color: var(--metal);">Mint / Buy NFT</h3>
                    <p class="small" style="margin: 0 0 12px 0;">100 limited NFTs · 1 g C60 each · Price: <strong style="color: var(--metal);">$100</strong> (example). Payment accepted: USDC or ETH. Connect wallet or purchase via fiat checkout.</p>
                    <div>
@@ -239,8 +225,8 @@
                    </div>
                </div>
 
-               <div class="card shimmer-glow-box" aria-labelledby="reserve-title">
-                   <h4 id="reserve-title" style="font-size: 1.2rem; margin: 0 0 12px 0; color: var(--metal);">Proof Snapshot</h4>
+               <div class="card">
+                   <h4 style="font-size: 1.2rem; margin: 0 0 12px 0; color: var(--metal);">Proof Snapshot</h4>
                    <p class="small" style="margin: 0 0 12px 0;">Batch: A · Total mass: 100 g · Purity: 99.5% · Lab report: <a href="#">Download PDF</a></p>
                    <ul style="color: var(--text-muted); line-height: 1.6; margin-top: 8px;">
                        <li>Storage ID: Vault-01</li>
@@ -249,7 +235,7 @@
                    </ul>
                </div>
 
-               <div class="card shimmer-glow-box">
+               <div class="card">
                    <h4 style="font-size: 1.2rem; margin: 0 0 12px 0; color: var(--metal);">Contact & Legal</h4>
                    <p class="small" style="margin: 0 0 8px 0;">Questions about redemption, shipping, or audits? Contact: <a href="mailto:hello@bucky-vault.vercel.app">hello@bucky-vault.vercel.app</a></p>
                    <p class="small" style="margin: 0; color: var(--text-muted);">Legal: Tokens and NFTs are subject to terms. Ensure your jurisdiction permits purchase and import of nanomaterials.</p>
@@ -259,43 +245,6 @@
 
        <footer>Built for BuckyVault. Replace placeholders with your contract address, IPFS links, and audited docs before launch.</footer>
    </div>
-
-   <script type="module">
-   // 3D Molecule Animation (same as landing page)
-   import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js';
-   const canvas = document.getElementById('moleculeCanvas');
-   const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-   renderer.setSize(window.innerWidth, window.innerHeight);
-   renderer.setPixelRatio(window.devicePixelRatio);
-   const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
-   camera.position.z = 10;
-   const scene = new THREE.Scene();
-
-   // Vertices and bonds (abbreviated; full list as in previous code)
-   const vertices = [ /* Full C60 vertices array here - copy from index.html */ ];
-   const bonds = [ /* Full bonds array here - copy from index.html */ ];
-
-   const positions = new Float32Array(vertices.length * 3);
-   vertices.forEach((v,i) => { positions[i*3] = v.x; positions[i*3+1] = v.y; positions[i*3+2] = v.z; });
-   const indices = new Uint16Array(bonds.length * 2);
-   bonds.forEach(([a,b],i) => { indices[i*2] = a; indices[i*2+1] = b; });
-   const geometry = new THREE.BufferGeometry();
-   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-   geometry.setIndex(new THREE.BufferAttribute(indices, 1));
-
-   const material = new THREE.LineBasicMaterial({ color: 0xF0D878, transparent: true, opacity: 0.92, linewidth: 3 });
-   const molecule = new THREE.LineSegments(geometry, material);
-   scene.add(molecule);
-
-   const sphereGeo = new THREE.SphereGeometry(3.5, 64, 64);
-   const sphereMat = new THREE.MeshBasicMaterial({ color: 0xF0D878, transparent: true, opacity: 0.04, wireframe: true });
-   const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-   scene.add(sphere);
-
-   function animate(){ requestAnimationFrame(animate); molecule.rotation.x += 0.003; molecule.rotation.y += 0.005; sphere.rotation.x += 0.003; sphere.rotation.y += 0.005; renderer.render(scene, camera); }
-   animate();
-   window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
-   </script>
 
    <script>
    // Interactive Functions
@@ -311,31 +260,6 @@
            alert('Checkout placeholder. Implement server integration to handle orders, minting, and USDC settlement.');
        }
    }
-   // Shimmer Effect Injector
-   (function() {
-       function applyShimmerEffect() {
-           document.querySelectorAll('.shimmer-glow-box').forEach(el => {
-               if (el.dataset.shimmerApplied) return;
-               const computed = window.getComputedStyle(el);
-               const borderRadius = computed.borderRadius || '16px';
-               const container = document.createElement('div');
-               container.className = 'shimmer-glow-container';
-               container.style.borderRadius = borderRadius;
-               el.parentNode.insertBefore(container, el);
-               container.appendChild(el);
-               const glow = document.createElement('div');
-               glow.className = 'shimmer-glow-border';
-               container.insertBefore(glow, el);
-               el.dataset.shimmerApplied = 'true';
-           });
-       }
-       if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', applyShimmerEffect); } else { applyShimmerEffect(); }
-       new MutationObserver(applyShimmerEffect).observe(document.body, { childList: true, subtree: true });
-   })();
-   // Nebula Animation
-   const style = document.createElement('style');
-   style.textContent = '@keyframes nebulahero { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(15deg); } }';
-   document.head.appendChild(style);
    </script>
 </body>
 </html>
