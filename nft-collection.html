@@ -73,6 +73,7 @@
        .small { font-size: 0.85rem; color: var(--text-muted); background: rgba(240,216,120,0.08); border: 1px solid var(--border); padding: 8px; border-radius: 8px; }
        .hero { display: flex; gap: 24px; align-items: center; margin-bottom: 24px; }
        .hero .art { width: 140px; height: 140px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--metal); box-shadow: var(--glow); }
+       .hero .art img { width:100%; height:100%; object-fit:contain; }
        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
        .stat { background: rgba(240,216,120,0.08); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid var(--border); }
        .stat b { display: block; font-size: 1.2rem; color: var(--metal); }
@@ -97,22 +98,21 @@
            display: flex; align-items: center; justify-content: center; gap: 12px; margin: 32px 0;
        }
        .header-title img {
-    height: 2rem;
-    width: auto;
-    object-fit: contain;
-    margin-top: -8px;          /* adjust this value */
-    /* or: transform: translateY(-4px); */
-}
+           height: 2rem;
+           width: auto;
+           object-fit: contain;
+           margin-top: -8px;
+       }
        .header-title h1 {
            margin: 0; font-size: 2rem; color: var(--metal);
        }
        /* Responsive */
        @media (max-width: 980px) { main { grid-template-columns: 1fr; gap: 24px; } aside { order: 2; } }
-       @media (max-width: 768px) { 
-           .hero { flex-direction: column; text-align: center; } 
-           .grid { grid-template-columns: 1fr; } 
-           .nft-list { grid-template-columns: 1fr; } 
-           section { padding: 24px 16px; } 
+       @media (max-width: 768px) {
+           .hero { flex-direction: column; text-align: center; }
+           .grid { grid-template-columns: 1fr; }
+           .nft-list { grid-template-columns: 1fr; }
+           section { padding: 24px 16px; }
            .header-title { flex-direction: column; text-align: center; gap: 8px; }
            .header-title img { height: 1.8rem; }
        }
@@ -122,7 +122,6 @@
 <body>
    <!-- Static gradient background: #171B33 → #2A122B -->
    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, #171B33, #2A122B); z-index: -2;"></div>
-
    <div class="container">
        <header class="header-title">
            <img src="buckyvault-logo.png" alt="BuckyVault Logo">
@@ -135,7 +134,9 @@
            <!-- Left Column: Main Content -->
            <div>
                <section class="card hero" aria-labelledby="hero-title">
-                   <div class="art" aria-hidden="true">C<sub>60</sub></div>
+                   <div class="art" aria-hidden="true">
+                       <img src="Fwire.png" alt="C₆₀ fullerene wireframe" style="width:100%;height:100%;object-fit:contain;">
+                   </div>
                    <div>
                        <h2 id="hero-title" style="margin: 0 0 8px 0; font-size: 1.5rem; color: var(--metal);">100 x 1 g FUL60 NFTs</h2>
                        <p style="margin: 8px 0; color: var(--text-muted);">Each NFT is minted from a verified 100 g production batch. Metadata includes batch ID, lab results, and a redemption clause.</p>
@@ -261,7 +262,6 @@
        </main>
        <footer>Built for BuckyVault. Replace placeholders with your contract address, IPFS links, and audited docs before launch.</footer>
    </div>
-
    <script>
    // Interactive Functions
    function showMetadata(id) { alert('Show metadata for NFT ' + id + '. Replace with modal or onchain fetch.'); }
