@@ -39,7 +39,6 @@
            --border: rgba(240,216,120,0.42);
            --glow: 0 0 20px rgba(240,216,120,0.38);
        }
-
        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
        body {
            font-family: 'Rajdhani', sans-serif; color: var(--text); background: var(--bg); line-height:1.72;
@@ -107,8 +106,8 @@
    </style>
 </head>
 <body>
-   <div class="herobgcolor" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, #141C32, #28132E); filter: blur(44px); opacity: 1.0; animation: nebulahero 26s infinite linear; z-index: -2;"></div>
-   <canvas class="molecule-canvas" id="moleculeCanvas" aria-hidden="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.32; pointer-events: none; z-index: -1;"></canvas>
+   <!-- Static gradient background: left #171B33 → right #2A122B -->
+   <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, #171B33, #2A122B); z-index: -2;"></div>
 
    <div class="container">
        <header style="display: flex; gap: 20px; align-items: center; margin: 32px 0;">
@@ -118,7 +117,6 @@
                <p style="margin: 0; color: var(--text-muted); font-size: 1rem;">100 limited NFTs. Each NFT = 1 g of verified C₆₀ fullerene, physically backed, auditable, and optionally redeemable.</p>
            </div>
        </header>
-
        <main>
            <!-- Left Column: Main Content -->
            <div>
@@ -134,7 +132,6 @@
                        </div>
                    </div>
                </section>
-
                <section class="card shimmer-glow-box" style="margin-top: 24px;" aria-labelledby="nft-collection-title">
                    <h3 id="nft-collection-title" class="section-title" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--metal);">NFT Collection Preview</h3>
                    <p class="small" style="margin: 0 0 16px 0;">Click an NFT to view metadata and redemption options. These are placeholders; replace images and metadata links after minting.</p>
@@ -164,7 +161,6 @@
                        <!-- Add more NFTs dynamically or statically up to 100 -->
                    </div>
                </section>
-
                <section class="card shimmer-glow-box" style="margin-top: 24px;">
                    <h3 class="section-title" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--metal);">Proof of Reserve & Lab Documentation</h3>
                    <p style="margin: 0 0 16px 0; color: var(--text-muted);">Transparency is mandatory. Publish these items and link them from NFT metadata:</p>
@@ -175,7 +171,6 @@
                        <li><b>On-chain mint record:</b> contract address and token IDs.</li>
                    </ul>
                </section>
-
                <section class="card shimmer-glow-box" style="margin-top: 24px;">
                    <h3 class="section-title" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--metal);">Redemption Policy</h3>
                    <p style="color: var(--text-muted);">You may choose redeemable, non-redeemable, or hybrid NFTs. A recommended redeemable flow:</p>
@@ -187,7 +182,6 @@
                    </ol>
                    <p style="margin: 8px 0 0 0; color: var(--highlight); font-weight: 500;"><strong>Warning:</strong> physical transfers require compliance and safety procedures. Specify how redemption handles hazardous shipping rules if applicable.</p>
                </section>
-
                <section class="card shimmer-glow-box" style="margin-top: 24px;">
                    <h3 class="section-title" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--metal);">NFT Metadata Example</h3>
                    <pre>{
@@ -207,7 +201,6 @@
   }
 }</pre>
                </section>
-
                <section class="card shimmer-glow-box" style="margin-top: 24px;">
                    <h3 class="section-title" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--metal);">FAQ</h3>
                    <div>
@@ -217,7 +210,6 @@
                    </div>
                </section>
            </div>
-
            <!-- Right Column: Sidebar -->
            <aside>
                <div class="card cta shimmer-glow-box" aria-labelledby="cta-title">
@@ -238,7 +230,6 @@
                        <div class="contract">0x1234...abcd (placeholder)</div>
                    </div>
                </div>
-
                <div class="card shimmer-glow-box" aria-labelledby="reserve-title">
                    <h4 id="reserve-title" style="font-size: 1.2rem; margin: 0 0 12px 0; color: var(--metal);">Proof Snapshot</h4>
                    <p class="small" style="margin: 0 0 12px 0;">Batch: A · Total mass: 100 g · Purity: 99.5% · Lab report: <a href="#">Download PDF</a></p>
@@ -248,7 +239,6 @@
                        <li>Audits: Third-party lab pending</li>
                    </ul>
                </div>
-
                <div class="card shimmer-glow-box">
                    <h4 style="font-size: 1.2rem; margin: 0 0 12px 0; color: var(--metal);">Contact & Legal</h4>
                    <p class="small" style="margin: 0 0 8px 0;">Questions about redemption, shipping, or audits? Contact: <a href="mailto:hello@bucky-vault.vercel.app">hello@bucky-vault.vercel.app</a></p>
@@ -256,46 +246,8 @@
                </div>
            </aside>
        </main>
-
        <footer>Built for BuckyVault. Replace placeholders with your contract address, IPFS links, and audited docs before launch.</footer>
    </div>
-
-   <script type="module">
-   // 3D Molecule Animation (same as landing page)
-   import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.module.js';
-   const canvas = document.getElementById('moleculeCanvas');
-   const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-   renderer.setSize(window.innerWidth, window.innerHeight);
-   renderer.setPixelRatio(window.devicePixelRatio);
-   const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
-   camera.position.z = 10;
-   const scene = new THREE.Scene();
-
-   // Vertices and bonds (abbreviated; full list as in previous code)
-   const vertices = [ /* Full C60 vertices array here - copy from index.html */ ];
-   const bonds = [ /* Full bonds array here - copy from index.html */ ];
-
-   const positions = new Float32Array(vertices.length * 3);
-   vertices.forEach((v,i) => { positions[i*3] = v.x; positions[i*3+1] = v.y; positions[i*3+2] = v.z; });
-   const indices = new Uint16Array(bonds.length * 2);
-   bonds.forEach(([a,b],i) => { indices[i*2] = a; indices[i*2+1] = b; });
-   const geometry = new THREE.BufferGeometry();
-   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-   geometry.setIndex(new THREE.BufferAttribute(indices, 1));
-
-   const material = new THREE.LineBasicMaterial({ color: 0xF0D878, transparent: true, opacity: 0.92, linewidth: 3 });
-   const molecule = new THREE.LineSegments(geometry, material);
-   scene.add(molecule);
-
-   const sphereGeo = new THREE.SphereGeometry(3.5, 64, 64);
-   const sphereMat = new THREE.MeshBasicMaterial({ color: 0xF0D878, transparent: true, opacity: 0.04, wireframe: true });
-   const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-   scene.add(sphere);
-
-   function animate(){ requestAnimationFrame(animate); molecule.rotation.x += 0.003; molecule.rotation.y += 0.005; sphere.rotation.x += 0.003; sphere.rotation.y += 0.005; renderer.render(scene, camera); }
-   animate();
-   window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
-   </script>
 
    <script>
    // Interactive Functions
@@ -332,10 +284,6 @@
        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', applyShimmerEffect); } else { applyShimmerEffect(); }
        new MutationObserver(applyShimmerEffect).observe(document.body, { childList: true, subtree: true });
    })();
-   // Nebula Animation
-   const style = document.createElement('style');
-   style.textContent = '@keyframes nebulahero { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(15deg); } }';
-   document.head.appendChild(style);
    </script>
 </body>
 </html>
